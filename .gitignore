@@ -1,6 +1,8 @@
 # Maven / Gradle build
-target/
+
+!./target/airport-system.0.0.1-SNAPSHOT.jar
 build/
+classes
 
 # Maven Wrapper
 .mvn/
@@ -8,13 +10,6 @@ build/
 !/.mvn/wrapper/maven-wrapper.properties
 mvnw
 mvnw.cmd
-
-# Gradle Wrapper
-.gradle/
-!gradle/wrapper/gradle-wrapper.jar
-!gradle/wrapper/gradle-wrapper.properties
-gradlew
-gradlew.bat
 
 # IDE files
 *.iml
@@ -37,4 +32,3 @@ Thumbs.db
 
 # Docker
 # DO NOT ignore Dockerfile if deploying with Docker
-docker-compose.yml
