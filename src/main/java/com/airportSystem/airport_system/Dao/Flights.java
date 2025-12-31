@@ -5,10 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.TableGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @AllArgsConstructor
@@ -17,9 +17,10 @@ import lombok.NoArgsConstructor;
 public class Flights {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "flights_gen")
+    @TableGenerator(name = "flights_gen", table = "flights_seq", pkColumnName = "seq_name", valueColumnName = "seq_count", pkColumnValue = "flights", allocationSize = 1)
     private int flightId;
-    
+
     @Column(columnDefinition = "json")
     private String bussinessClass;
     @Column(columnDefinition = "json")
@@ -33,5 +34,5 @@ public class Flights {
     private String destinationstate;
     private String destinationcity;
     private int price;
-    
+
 }

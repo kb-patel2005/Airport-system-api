@@ -13,9 +13,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Staff {
+    //  @Id @GeneratedValue(strategy = GenerationType.TABLE, generator = "flights_gen") @TableGenerator( name = "flights_gen", table = "flights_seq", pkColumnName = "seq_name", valueColumnName = "seq_count", pkColumnValue = "flights", allocationSize = 1 
+
 
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.TABLE, generator = "staff_gen")
+    @jakarta.persistence.TableGenerator(
+        name = "staff_gen",
+        table = "staff_seq",
+        pkColumnName = "seq_name",
+        valueColumnName = "seq_count",
+        pkColumnValue = "staff",
+        allocationSize = 1
+    )
     private int staffId;
     private String password;
     private String username;
