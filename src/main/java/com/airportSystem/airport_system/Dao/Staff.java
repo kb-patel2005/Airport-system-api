@@ -17,15 +17,7 @@ public class Staff {
 
 
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.TABLE, generator = "staff_gen")
-    @jakarta.persistence.TableGenerator(
-        name = "staff_gen",
-        table = "staff_seq",
-        pkColumnName = "seq_name",
-        valueColumnName = "seq_count",
-        pkColumnValue = "staff",
-        allocationSize = 1
-    )
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int staffId;
     private String password;
     private String username;
