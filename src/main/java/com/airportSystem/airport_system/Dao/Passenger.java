@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,8 +18,8 @@ import lombok.NoArgsConstructor;
 public class Passenger {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int passportNumber;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long passportNumber;
     private String username;
     private String password;
     private String gender;
@@ -34,5 +33,5 @@ public class Passenger {
     private String seatno;
     @ManyToOne
     private Flights flight;
-    
+
 }

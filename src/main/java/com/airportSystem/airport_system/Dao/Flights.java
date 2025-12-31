@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class Flights {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int flightId;
     
     @Column(columnDefinition = "json")
