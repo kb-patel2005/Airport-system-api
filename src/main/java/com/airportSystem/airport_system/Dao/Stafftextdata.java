@@ -1,5 +1,6 @@
 package com.airportSystem.airport_system.Dao;
 
+import jakarta.persistence.Lob;
 import lombok.Data;
 
 @Data
