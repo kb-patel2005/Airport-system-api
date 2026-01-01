@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Stafftextdata {
-    
+
     private String password;
     private String username;
     private String gender;

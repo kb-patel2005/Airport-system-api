@@ -19,9 +19,8 @@ import lombok.NoArgsConstructor;
 public class Passenger {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "passenger_gen")
-    @TableGenerator(name = "passenger_gen", table = "passenger_seq", pkColumnName = "seq_name", valueColumnName = "seq_count", pkColumnValue = "passenger", allocationSize = 1)
-    private Long passportNumber;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int passportNumber;
     private String username;
     private String password;
     private String gender;

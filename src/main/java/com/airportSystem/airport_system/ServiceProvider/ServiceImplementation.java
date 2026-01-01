@@ -19,8 +19,14 @@ public class ServiceImplementation implements AirportService{
 
     @Override
     public String addPassenger(Passenger passenger) {
-        repository.save(passenger);
-        return "Add Passenger Data";
+        try {
+            repository.save(passenger);
+            return "Add Passenger Data";
+        } catch (Exception e) {
+            // Handle exception if needed
+            return "Error adding passenger: " + e.getMessage();
+        }
+        
     }
 
     @Override
