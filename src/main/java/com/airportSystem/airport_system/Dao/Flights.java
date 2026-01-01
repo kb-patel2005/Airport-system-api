@@ -17,10 +17,8 @@ import lombok.NoArgsConstructor;
 public class Flights {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "flights_gen")
-    @TableGenerator(name = "flights_gen", table = "flights_seq", pkColumnName = "seq_name", valueColumnName = "seq_count", pkColumnValue = "flights", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int flightId;
-
     @Column(columnDefinition = "json")
     private String bussinessClass;
     @Column(columnDefinition = "json")
