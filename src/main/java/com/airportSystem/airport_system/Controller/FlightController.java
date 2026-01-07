@@ -53,11 +53,6 @@ public class FlightController {
         return flightService.addFlight(flight);
     }
 
-    @PutMapping("/updateFlight")
-    public String updateFlight(@RequestBody Flights flight) {
-        return flightService.updateFlight(flight);
-    }
-
     @DeleteMapping("/deleteFlight/{id}")
     public String deleteFlight(@PathVariable int id) {
         return flightService.deleteFlight(id);

@@ -2,6 +2,7 @@ package com.airportSystem.airport_system.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.airportSystem.airport_system.Dao.FlightAssign;
+import com.airportSystem.airport_system.Dao.FlightRepository;
 import com.airportSystem.airport_system.Dao.LoginStaff;
 import com.airportSystem.airport_system.Dao.Passenger;
 import com.airportSystem.airport_system.Dao.Stafftextdata;
@@ -31,6 +33,9 @@ public class controller {
 
     @Autowired
     Repository repository;
+
+    @Autowired
+    FlightRepository flightRepository;
 
     @GetMapping("/welcome/passenger/{id}")
     public Passenger welcome(@PathVariable("id") int id) {
@@ -69,26 +74,38 @@ public class controller {
         return service.cancelFlight(id);
     }
 
+    /*********************************
+     * single operation
+     **********************************************/
+
+    @Async
+    public void updatePassengerAsync(FlightAssign request) {
+        Passenger passenger = repository.findByPassportNumber(request.getPassengerId());
+        if (request.getSeatNo() == null) {
+            passenger.setSeatno(null);
+            passenger.setFlight(null);
+        } else {
+            passenger.setFlight(request.getFlight());
+            passenger.setSeatno(request.getSeatNo());
+        }
+        repository.save(passenger);
+    }
+
+    @Async
+    public void saveFlightAsync(FlightAssign request) {flightRepository.save(request.getFlight());}
+
     @PutMapping("/addFlight")
     public void updatePassenger(@RequestBody FlightAssign request) {
         try {
-            System.out.println(request.getPassengerId());
-            Passenger passenger = repository.findByPassportNumber(request.getPassengerId());
-            passenger.setFlight(request.getFlight());
-            passenger.setSeatno(request.getSeatNo());
-            repository.save(passenger);
+            updatePassengerAsync(request);
+            saveFlightAsync(request);
         } catch (Exception e) {
             throw e;
         }
-
-        // try {
-        // service.addFlightId(request.getPassengerId(), request.getFlight(),
-        // request.getSeatNo());
-        // } catch (Exception e) {
-        // System.out.println(e.getMessage());
-        // }
-
     }
+
+    /* End of single operation */
+    /*******************************************************************************/
 
     @DeleteMapping("/deletePassenger/{id}")
     public String deletePassenger(@PathVariable int id) {

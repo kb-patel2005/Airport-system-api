@@ -53,6 +53,7 @@ public class ServiceImplementation implements AirportService{
     @Override
     public String cancelFlight(int id) {
         repository.cancelPassengerBooking(id);
+        
         return "Flight cancelled successfully";
     }
     
