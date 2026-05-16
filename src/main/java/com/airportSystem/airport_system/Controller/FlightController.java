@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.airportSystem.airport_system.Dao.Flights;
-import com.airportSystem.airport_system.ServiceProvider.FlightService;
+
+import com.airportSystem.airport_system.Entities.Flights;
+import com.airportSystem.airport_system.Service.FlightService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @CrossOrigin("*")
@@ -35,21 +34,20 @@ public class FlightController {
 
     @PostMapping("/addFlight")
     public String addFlight(@RequestBody Flights flight) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        int[][] bseats = new int[6][4];
+        Boolean[][] bseats = new Boolean[6][4];
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                bseats[i][j] = 0;
+                bseats[i][j] = false;
             }
         }
-        int[][] eseats = new int[15][6];
-        for (int i = 0; i < 6; i++) {
+        Boolean[][] eseats = new Boolean[15][6];
+        for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 6; j++) {
-                eseats[i][j] = 0;
+                eseats[i][j] = false;
             }
         }
-        flight.setBussinessClass(mapper.writeValueAsString(bseats));
-        flight.setEconomicClass(mapper.writeValueAsString(eseats));
+        flight.setBusinessClass(bseats);
+        flight.setEconomyClass(eseats);
         return flightService.addFlight(flight);
     }
 

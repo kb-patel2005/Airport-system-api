@@ -1,5 +1,7 @@
 package com.airportSystem.airport_system.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
@@ -15,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.airportSystem.airport_system.Dao.FlightAssign;
-import com.airportSystem.airport_system.Dao.FlightRepository;
-import com.airportSystem.airport_system.Dao.LoginStaff;
-import com.airportSystem.airport_system.Dao.Passenger;
-import com.airportSystem.airport_system.Dao.Stafftextdata;
-import com.airportSystem.airport_system.ServiceProvider.AirportService;
-import com.airportSystem.airport_system.ServiceProvider.Repository;
+import com.airportSystem.airport_system.Entities.FlightAssign;
+import com.airportSystem.airport_system.Entities.LoginStaff;
+import com.airportSystem.airport_system.Entities.Passenger;
+import com.airportSystem.airport_system.Entities.Seat;
+import com.airportSystem.airport_system.Entities.Stafftextdata;
+import com.airportSystem.airport_system.Service.AirportService;
+import com.airportSystem.airport_system.Service.FlightService;
 
 @RestController
 @CrossOrigin("*")
@@ -29,13 +31,10 @@ import com.airportSystem.airport_system.ServiceProvider.Repository;
 public class controller {
 
     @Autowired
-    AirportService service;
+    private AirportService service;
 
     @Autowired
-    Repository repository;
-
-    @Autowired
-    FlightRepository flightRepository;
+    private FlightService flightService;
 
     @GetMapping("/welcome/passenger/{id}")
     public Passenger welcome(@PathVariable("id") int id) {
@@ -44,7 +43,7 @@ public class controller {
 
     @PostMapping("/passengerLogin")
     public Passenger getPassengerData(@RequestBody LoginStaff loginStaff) {
-        Passenger p = service.findByUsernameAndPassword(loginStaff.getUsername(), loginStaff.getPassword());
+        Passenger p = service.findByEmailAndPassword(loginStaff.getUsername(), loginStaff.getPassword());
         if (p == null) {
             return null;
         }
@@ -69,30 +68,22 @@ public class controller {
         return service.addPassenger(passenger);
     }
 
-    @PutMapping("/cancelFlight/{id}")
-    public String cancelFlight(@PathVariable("id") int id) {
-        return service.cancelFlight(id);
-    }
-
     /*********************************
      * single operation
      **********************************************/
 
     @Async
     public void updatePassengerAsync(FlightAssign request) {
-        Passenger passenger = repository.findByPassportNumber(request.getPassengerId());
-        if (request.getSeatNo() == null) {
-            passenger.setSeatno(null);
-            passenger.setFlight(null);
-        } else {
-            passenger.setFlight(request.getFlight());
-            passenger.setSeatno(request.getSeatNo());
-        }
-        repository.save(passenger);
+        service.addFlightId(
+            String.valueOf(request.getPassengerId()), 
+            String.valueOf(request.getFlight().getFlightId()), 
+            request.getSeat());
     }
 
     @Async
-    public void saveFlightAsync(FlightAssign request) {flightRepository.save(request.getFlight());}
+    public void saveFlightAsync(FlightAssign request) {
+        flightService.addFlight(request.getFlight());
+    }
 
     @PutMapping("/addFlight")
     public void updatePassenger(@RequestBody FlightAssign request) {
@@ -109,7 +100,22 @@ public class controller {
 
     @DeleteMapping("/deletePassenger/{id}")
     public String deletePassenger(@PathVariable int id) {
+        Passenger passenger = service.getPassengerData(id);
+        if (passenger == null) {
+            return "Passenger already deleted or not found";
+        }
+        passenger.getSeats().forEach(seat -> {
+            flightService.cancelFlight(seat);
+        });
         return service.deletePassenger(id);
     }
 
+    @PostMapping("/cancelBooking")
+    public void cancelBooking(@RequestBody Seat seat) {
+        try {
+            flightService.cancelFlight(seat);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 }

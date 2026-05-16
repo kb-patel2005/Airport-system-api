@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.airportSystem.airport_system.Dao.LoginStaff;
-import com.airportSystem.airport_system.Dao.Staff;
-import com.airportSystem.airport_system.Dao.Stafftextdata;
-import com.airportSystem.airport_system.ServiceProvider.StaffService;
+import com.airportSystem.airport_system.Entities.LoginStaff;
+import com.airportSystem.airport_system.Entities.Staff;
+import com.airportSystem.airport_system.Entities.Stafftextdata;
+import com.airportSystem.airport_system.Service.StaffService;
 
 @RestController
 @CrossOrigin("*")

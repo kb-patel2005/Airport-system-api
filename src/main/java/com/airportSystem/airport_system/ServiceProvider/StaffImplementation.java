@@ -3,8 +3,9 @@ package com.airportSystem.airport_system.ServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-// import com.airportSystem.airport_system.Dao.Passenger;
-import com.airportSystem.airport_system.Dao.Staff;
+import com.airportSystem.airport_system.Dao.StaffRepository;
+import com.airportSystem.airport_system.Entities.Staff;
+import com.airportSystem.airport_system.Service.StaffService;
 
 @Service
 public class StaffImplementation implements StaffService{
@@ -55,5 +56,4 @@ public class StaffImplementation implements StaffService{
         return "Staff deleted successfully";
     }
 
-    
 }
