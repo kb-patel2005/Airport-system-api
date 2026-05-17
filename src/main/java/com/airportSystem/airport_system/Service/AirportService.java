@@ -7,13 +7,13 @@ import com.airportSystem.airport_system.Entities.Seat;
 
 public interface AirportService {
     
-    public Passenger getPassengerData(int id);
+    public Passenger getPassengerData(long id);
 
     public String addPassenger(Passenger passenger);
 
     public void updatePassenger(Passenger passenger);
 
-    public String deletePassenger(int id);
+    public String deletePassenger(long id);
 
     public Passenger findByEmailAndPassword(String email, String password);
 

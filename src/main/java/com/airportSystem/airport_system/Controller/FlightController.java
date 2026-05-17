@@ -1,6 +1,9 @@
 package com.airportSystem.airport_system.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.airportSystem.airport_system.Entities.Flights;
+import com.airportSystem.airport_system.Entities.Seat;
 import com.airportSystem.airport_system.Service.FlightService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 @CrossOrigin("*")
@@ -33,21 +36,29 @@ public class FlightController {
     }
 
     @PostMapping("/addFlight")
-    public String addFlight(@RequestBody Flights flight) throws JsonProcessingException {
-        Boolean[][] bseats = new Boolean[6][4];
+    public String addFlight(@RequestBody Flights flight) throws JsonParseException {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
-                bseats[i][j] = false;
+                Seat seat = new Seat();
+                seat.setBooked(false);
+                seat.setRowNumber(String.valueOf(i + 1));
+                seat.setColNumber(String.valueOf(j + 1));
+                seat.setSeatClass("Bussiness");
+                seat.setFlight(flight);
+                flight.getSeats().add(seat);
             }
         }
-        Boolean[][] eseats = new Boolean[15][6];
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 6; j++) {
-                eseats[i][j] = false;
+                Seat seat = new Seat();
+                seat.setBooked(false);
+                seat.setRowNumber(String.valueOf(i + 1));
+                seat.setColNumber(String.valueOf(j + 1));
+                seat.setSeatClass("Economy");
+                seat.setFlight(flight);
+                flight.getSeats().add(seat);
             }
         }
-        flight.setBusinessClass(bseats);
-        flight.setEconomyClass(eseats);
         return flightService.addFlight(flight);
     }
 
@@ -56,4 +67,8 @@ public class FlightController {
         return flightService.deleteFlight(id);
     }
 
+    @GetMapping("/{id}/seats/{class}")
+    public List<List<Boolean>> getSeatsByClass(@PathVariable int id, @PathVariable String className) {
+        return flightService.getSeatsByClass(id, className);
+    }
 }

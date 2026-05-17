@@ -1,11 +1,14 @@
 package com.airportSystem.airport_system.Entities;
 
-import jakarta.persistence.Column;
+
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.TableGenerator;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +21,7 @@ public class Flights {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int flightId;
-    private Boolean[][] businessClass;
-    private Boolean[][] economyClass;
+    private Long id;
     private String airline;
     private String origincountry;
     private String originstate;
@@ -29,5 +30,7 @@ public class Flights {
     private String destinationstate;
     private String destinationcity;
     private int price;
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Seat> seats = new java.util.ArrayList<>();
 
 }

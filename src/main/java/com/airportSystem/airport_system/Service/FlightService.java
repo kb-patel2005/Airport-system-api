@@ -13,5 +13,6 @@ public interface FlightService {
     String updateFlight(Flights flight);
     String deleteFlight(int id);
     String cancelFlight(Seat seat);
+    List<List<Boolean>> getSeatsByClass(int id, String className);
 
 }

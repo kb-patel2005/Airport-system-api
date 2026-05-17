@@ -18,8 +18,8 @@ public class AirportServiceImplementation implements AirportService {
     private Repository repository;
 
     @Override
-    public Passenger getPassengerData(int id) {
-        return repository.getPassengerData(id);
+    public Passenger getPassengerData(long id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override
@@ -35,17 +35,17 @@ public class AirportServiceImplementation implements AirportService {
 
     @Override
     public void updatePassenger(Passenger passenger) {
-        Passenger existingPassenger = repository.findByPassportNumber(passenger.getPassportNumber());
+        Passenger existingPassenger = repository.findById(passenger.getId()).orElse(null);
         if (existingPassenger != null) {
             passenger.setSeats(passenger.getSeats());
             repository.save(passenger);
         } else {
-            System.out.println("Passenger not found with passport number: " + passenger.getPassportNumber());
+            System.out.println("Passenger not found with ID: " + passenger.getId());
         }
     }
 
     @Override
-    public String deletePassenger(int id) {
+    public String deletePassenger(long id) {
         repository.deleteById(id);
         return "Delete Passenger Data";
     }
@@ -57,7 +57,7 @@ public class AirportServiceImplementation implements AirportService {
 
     @Override
     public void addFlightId(String passengerId, String flightId, List<Seat> sendedseat) {
-        Optional<Passenger> passenger = repository.findById(Integer.parseInt(passengerId));
+        Optional<Passenger> passenger = repository.findById(Long.parseLong(passengerId));
         if (passenger.isPresent()) {
             Passenger existingPassenger = passenger.get();
             List<Seat> existingSeats = existingPassenger.getSeats();

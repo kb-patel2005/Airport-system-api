@@ -76,7 +76,7 @@ public class controller {
     public void updatePassengerAsync(FlightAssign request) {
         service.addFlightId(
             String.valueOf(request.getPassengerId()), 
-            String.valueOf(request.getFlight().getFlightId()), 
+            String.valueOf(request.getFlight().getId()), 
             request.getSeat());
     }
 
