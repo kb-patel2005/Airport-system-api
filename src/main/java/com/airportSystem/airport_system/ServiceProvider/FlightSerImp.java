@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.airportSystem.airport_system.Dao.FlightRepository;
 import com.airportSystem.airport_system.Dao.SeatRepository;
+import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
 import com.airportSystem.airport_system.Entities.Seat;
 import com.airportSystem.airport_system.Service.FlightService;
@@ -22,8 +23,8 @@ public class FlightSerImp implements FlightService {
     private SeatRepository seatRepository;
 
     @Override
-    public Page<Flights> getAllFlights(Pageable pageable) {
-        return flightRepository.findAll(pageable);
+    public Page<FlightDto> getAllFlights(Pageable pageable) {
+        return flightRepository.findAllFlightsSummary(pageable);
     }
 
     @Override

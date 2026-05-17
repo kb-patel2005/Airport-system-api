@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
 import com.airportSystem.airport_system.Entities.Seat;
 import com.airportSystem.airport_system.Service.FlightService;
@@ -31,7 +32,7 @@ public class FlightController {
     }
 
     @GetMapping("/allFlights")
-    public Page<Flights> getAllFlights(Pageable pageable) {
+    public Page<FlightDto> getAllFlights(Pageable pageable) {
         return flightService.getAllFlights(pageable);
     }
 

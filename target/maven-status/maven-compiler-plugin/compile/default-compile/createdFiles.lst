@@ -14,6 +14,7 @@ com\airportSystem\airport_system\Entities\Staff.class
 com\airportSystem\airport_system\ServiceProvider\StaffImplementation.class
 com\airportSystem\airport_system\AirportSystemApplication.class
 com\airportSystem\airport_system\ServiceProvider\FlightSerImp.class
+com\airportSystem\airport_system\Entities\FlightDto.class
 com\airportSystem\airport_system\Config\JwtFilter.class
 com\airportSystem\airport_system\Controller\AuthRequest.class
 com\airportSystem\airport_system\Dao\FlightRepository.class
