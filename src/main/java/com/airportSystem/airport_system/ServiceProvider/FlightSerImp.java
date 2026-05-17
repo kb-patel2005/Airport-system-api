@@ -38,6 +38,11 @@ public class FlightSerImp implements FlightService {
     }
 
     @Override
+    public Flights saveFlight(Flights flight) {
+        return flightRepository.save(flight);
+    }
+
+    @Override
     public String updateFlight(Flights flight) {
         flightRepository.save(flight);
         return "Flight updated successfully";

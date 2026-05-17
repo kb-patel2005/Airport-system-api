@@ -37,6 +37,7 @@ public class FlightController {
 
     @PostMapping("/addFlight")
     public String addFlight(@RequestBody Flights flight) throws JsonParseException {
+        Flights savedFlight = flightService.saveFlight(flight);
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 4; j++) {
                 Seat seat = new Seat();
@@ -44,8 +45,8 @@ public class FlightController {
                 seat.setRowNumber(String.valueOf(i + 1));
                 seat.setColNumber(String.valueOf(j + 1));
                 seat.setSeatClass("Bussiness");
-                seat.setFlight(flight);
-                flight.getSeats().add(seat);
+                seat.setFlight(savedFlight);
+                savedFlight.getSeats().add(seat);
             }
         }
         for (int i = 0; i < 10; i++) {
@@ -55,11 +56,11 @@ public class FlightController {
                 seat.setRowNumber(String.valueOf(i + 1));
                 seat.setColNumber(String.valueOf(j + 1));
                 seat.setSeatClass("Economy");
-                seat.setFlight(flight);
-                flight.getSeats().add(seat);
+                seat.setFlight(savedFlight);
+                savedFlight.getSeats().add(seat);
             }
         }
-        return flightService.addFlight(flight);
+        return flightService.addFlight(savedFlight);
     }
 
     @DeleteMapping("/deleteFlight/{id}")
