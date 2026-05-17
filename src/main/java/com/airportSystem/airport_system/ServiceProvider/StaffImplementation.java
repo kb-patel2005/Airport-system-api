@@ -14,21 +14,21 @@ public class StaffImplementation implements StaffService{
     StaffRepository staffRepository;
 
     @Override
-    public Staff staffLogin(String username, String password) {
-        return staffRepository.findByUsernameAndPassword(username, password);
+    public Staff staffLogin(String email, String password) {
+        return staffRepository.findByEmailAndPassword(email, password);
     }
 
     @Override
-    public String PasswordMethod(String username, String oldPassword, String newPassword) {
+    public String PasswordMethod(String email, String oldPassword, String newPassword) {
 
-        Staff existingStaff = staffRepository.findByUsername(username);
+        Staff existingStaff = staffRepository.findByEmailAndPassword(email, newPassword);
         if(existingStaff == null){
             return "Staff not found";
         }
         if (oldPassword != existingStaff.getPassword()) {
             return "Old password is incorrect";
         } else {
-            staffRepository.changingPassword(username, oldPassword, newPassword);
+            staffRepository.changingPassword(email, oldPassword, newPassword);
             return null;
         }
 

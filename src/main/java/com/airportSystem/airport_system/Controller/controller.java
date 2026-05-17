@@ -68,35 +68,17 @@ public class controller {
         return service.addPassenger(passenger);
     }
 
-    /*********************************
-     * single operation
-     **********************************************/
-
-    @Async
-    public void updatePassengerAsync(FlightAssign request) {
-        service.addFlightId(
-            String.valueOf(request.getPassengerId()), 
-            String.valueOf(request.getFlight().getId()), 
-            request.getSeat());
-    }
-
-    @Async
-    public void saveFlightAsync(FlightAssign request) {
-        flightService.addFlight(request.getFlight());
-    }
-
     @PutMapping("/addFlight")
     public void updatePassenger(@RequestBody FlightAssign request) {
         try {
-            updatePassengerAsync(request);
-            saveFlightAsync(request);
+            service.addFlightId(
+            String.valueOf(request.getPassengerId()), 
+            String.valueOf(request.getFlight().getId()), 
+            request.getSeat());
         } catch (Exception e) {
             throw e;
         }
     }
-
-    /* End of single operation */
-    /*******************************************************************************/
 
     @DeleteMapping("/deletePassenger/{id}")
     public String deletePassenger(@PathVariable int id) {

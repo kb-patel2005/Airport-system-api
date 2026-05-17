@@ -8,11 +8,11 @@ import com.airportSystem.airport_system.Entities.Staff;
 @Repository
 public interface StaffRepository extends JpaRepository<Staff, Integer> {
     
-    @Query("SELECT s FROM Staff s WHERE s.username = ?1 AND s.password = ?2")
-    public Staff findByUsernameAndPassword(String username, String password);
+    @Query("SELECT s FROM Staff s WHERE s.email = ?1 AND s.password = ?2")
+    public Staff findByEmailAndPassword(String email, String password);
 
-    @Query(value="UPDATE Staff s SET s.password = ?3 WHERE s.username = ?1 AND s.password = ?2",nativeQuery = true)
-    public String changingPassword(String username,String oldPassword, String newPassword);
+    @Query(value="UPDATE Staff s SET s.password = ?3 WHERE s.email = ?1 AND s.password = ?2",nativeQuery = true)
+    public String changingPassword(String email,String oldPassword, String newPassword);
 
     public Staff findByUsername(String username);
     
