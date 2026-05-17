@@ -37,6 +37,7 @@ public class FlightController {
 
     @PostMapping("/addFlight")
     public String addFlight(@RequestBody Flights flight){
+        flight.setSeats(new java.util.ArrayList<>());
         Flights savedFlight = flightService.saveFlight(flight);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
