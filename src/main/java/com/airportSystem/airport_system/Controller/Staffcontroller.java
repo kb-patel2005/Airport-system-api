@@ -58,7 +58,7 @@ public class Staffcontroller {
     // }
 
     @DeleteMapping("/staffLogout/{id}")
-    public String staffLogout(@PathVariable int id) {
+    public String staffLogout(@PathVariable("id") int id) {
         return staffService.deleteStaff(id);
     }
 

@@ -27,7 +27,7 @@ public class FlightController {
     FlightService flightService;
 
     @GetMapping("/flight/{id}")
-    public Flights getflightById(@PathVariable int id) {
+    public Flights getflightById(@PathVariable("id") int id) {
        return flightService.getFlightById(id).orElse(null);
     }
 
@@ -66,12 +66,12 @@ public class FlightController {
     }
 
     @DeleteMapping("/deleteFlight/{id}")
-    public String deleteFlight(@PathVariable int id) {
+    public String deleteFlight(@PathVariable("id") int id) {
         return flightService.deleteFlight(id);
     }
 
-    @GetMapping("/{id}/seats/{class}")
-    public List<List<Boolean>> getSeatsByClass(@PathVariable int id, @PathVariable String className) {
+    @GetMapping("/{id}/seats/{className}")
+    public List<List<Boolean>> getSeatsByClass(@PathVariable("id") int id, @PathVariable("className") String className) {
         return flightService.getSeatsByClass(id, className);
     }
 }

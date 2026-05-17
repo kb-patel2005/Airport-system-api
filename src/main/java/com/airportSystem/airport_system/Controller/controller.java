@@ -81,7 +81,7 @@ public class controller {
     }
 
     @DeleteMapping("/deletePassenger/{id}")
-    public String deletePassenger(@PathVariable int id) {
+    public String deletePassenger(@PathVariable("id") int id) {
         Passenger passenger = service.getPassengerData(id);
         if (passenger == null) {
             return "Passenger already deleted or not found";
