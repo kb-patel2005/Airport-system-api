@@ -1,10 +1,7 @@
 package com.airportSystem.airport_system.Controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.airportSystem.airport_system.Entities.BusinessSeats;
+import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.LoginStaff;
 import com.airportSystem.airport_system.Entities.Passenger;
-import com.airportSystem.airport_system.Entities.Seat;
 import com.airportSystem.airport_system.Entities.Stafftextdata;
 import com.airportSystem.airport_system.Service.AirportService;
 import com.airportSystem.airport_system.Service.FlightService;
@@ -71,10 +70,7 @@ public class controller {
     @PutMapping("/addFlight")
     public void updatePassenger(@RequestBody FlightAssign request) {
         try {
-            service.addFlightId(
-            String.valueOf(request.getPassengerId()), 
-            String.valueOf(request.getFlight().getId()), 
-            request.getSeat());
+            service.addFlightId(request);
         } catch (Exception e) {
             throw e;
         }
@@ -86,18 +82,31 @@ public class controller {
         if (passenger == null) {
             return "Passenger already deleted or not found";
         }
-        passenger.getSeats().forEach(seat -> {
-            flightService.cancelFlight(seat);
+        passenger.getBusinessseats().forEach(seat -> {
+            flightService.cancelBusinessFlight(seat);
+        });
+        passenger.getEconomicseats().forEach(seat -> {
+            flightService.cancelEconomicFlight(seat);
         });
         return service.deletePassenger(id);
     }
 
-    @PostMapping("/cancelBooking")
-    public void cancelBooking(@RequestBody Seat seat) {
+    @PostMapping("/cancelEBooking")
+    public void cancelEconomicBooking(@RequestBody EconomicSeats seat) {
         try {
-            flightService.cancelFlight(seat);
+            flightService.cancelEconomicFlight(seat);
         } catch (Exception e) {
             throw e;
         }
     }
+
+    @PostMapping("/cancelBBooking")
+    public void cancelBusinessBooking(@RequestBody BusinessSeats seat) {
+        try {
+            flightService.cancelBusinessFlight(seat);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
 }

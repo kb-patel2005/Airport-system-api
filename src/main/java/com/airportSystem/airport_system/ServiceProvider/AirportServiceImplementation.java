@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.airportSystem.airport_system.Dao.Repository;
+import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Passenger;
-import com.airportSystem.airport_system.Entities.Seat;
 import com.airportSystem.airport_system.Service.AirportService;
 
 @Service
@@ -37,7 +37,8 @@ public class AirportServiceImplementation implements AirportService {
     public void updatePassenger(Passenger passenger) {
         Passenger existingPassenger = repository.findById(passenger.getId()).orElse(null);
         if (existingPassenger != null) {
-            passenger.setSeats(passenger.getSeats());
+            passenger.setEconomicseats(existingPassenger.getEconomicseats());
+            passenger.setBusinessseats(existingPassenger.getBusinessseats());
             repository.save(passenger);
         } else {
             System.out.println("Passenger not found with ID: " + passenger.getId());
@@ -56,17 +57,21 @@ public class AirportServiceImplementation implements AirportService {
     }
 
     @Override
-    public void addFlightId(String passengerId, String flightId, List<Seat> sendedseat) {
-        Optional<Passenger> passenger = repository.findById(Long.parseLong(passengerId));
+    public void addFlightId(FlightAssign flightAssign) {
+        Optional<Passenger> passenger = repository.findById(flightAssign.getPassengerId());
         if (passenger.isPresent()) {
             Passenger existingPassenger = passenger.get();
-            List<Seat> existingSeats = existingPassenger.getSeats();
-            existingSeats.addAll(sendedseat);
-            existingPassenger.setSeats(existingSeats);
+            if (flightAssign.getEconomicSeats() != null) {
+                existingPassenger.getEconomicseats().addAll(flightAssign.getEconomicSeats());
+            }
+            if (flightAssign.getBusinessSeats() != null) {
+                existingPassenger.getBusinessseats().addAll(flightAssign.getBusinessSeats());
+            }
             repository.save(existingPassenger);
         } else {
-            System.out.println("Passenger not found with ID: " + passengerId);
+            System.out.println("Passenger not found with ID: " + flightAssign.getPassengerId());
         }
     }
+
 
 }

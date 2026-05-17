@@ -1,9 +1,7 @@
 package com.airportSystem.airport_system.Service;
 
-import java.util.List;
-
+import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Passenger;
-import com.airportSystem.airport_system.Entities.Seat;
 
 public interface AirportService {
     
@@ -17,6 +15,6 @@ public interface AirportService {
 
     public Passenger findByEmailAndPassword(String email, String password);
 
-    public void addFlightId(String passengerId, String flightId, List<Seat> sendedseat);
+    public void addFlightId(FlightAssign flightAssign);
 
 }

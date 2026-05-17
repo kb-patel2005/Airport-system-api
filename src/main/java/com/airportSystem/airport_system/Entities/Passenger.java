@@ -12,7 +12,6 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.airportSystem.airport_system.Entities.Seat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
@@ -36,6 +35,9 @@ public class Passenger {
     private byte[] image;
     @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Seat> seats = new java.util.ArrayList<>();
+    private List<EconomicSeats> economicseats = new java.util.ArrayList<>();
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<BusinessSeats> businessseats = new java.util.ArrayList<>();
 
 }

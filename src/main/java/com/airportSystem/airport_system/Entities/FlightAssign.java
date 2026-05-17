@@ -6,7 +6,9 @@ import lombok.Data;
 @Data
 public class FlightAssign {
 
-    private int passengerId;
+    private Long passengerId;
     private Flights flight;
-    private List<Seat> seat;
+    private List<EconomicSeats> economicSeats;
+    private List<BusinessSeats> businessSeats;
+    
 }

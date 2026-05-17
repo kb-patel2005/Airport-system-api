@@ -1,9 +1,9 @@
 package com.airportSystem.airport_system.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JsonParseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.airportSystem.airport_system.Entities.BusinessSeats;
+import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
-import com.airportSystem.airport_system.Entities.Seat;
 import com.airportSystem.airport_system.Service.FlightService;
 
 @RestController
@@ -24,7 +25,7 @@ import com.airportSystem.airport_system.Service.FlightService;
 public class FlightController {
 
     @Autowired
-    FlightService flightService;
+    private FlightService flightService;
 
     @GetMapping("/flight/{id}")
     public Flights getflightById(@PathVariable("id") int id) {
@@ -38,28 +39,27 @@ public class FlightController {
 
     @PostMapping("/addFlight")
     public String addFlight(@RequestBody Flights flight){
-        flight.setSeats(new java.util.ArrayList<>());
+        flight.setEconomicseats(new ArrayList<>());
+        flight.setBusinessseats(new ArrayList<>());
         Flights savedFlight = flightService.saveFlight(flight);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                Seat seat = new Seat();
+                BusinessSeats seat = new BusinessSeats();
                 seat.setBooked(false);
                 seat.setRowNumber(String.valueOf(i + 1));
                 seat.setColNumber(String.valueOf(j + 1));
-                seat.setSeatClass("Bussiness");
                 seat.setFlight(savedFlight);
-                savedFlight.getSeats().add(seat);
+                savedFlight.getBusinessseats().add(seat);
             }
         }
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 4; j++) {
-                Seat seat = new Seat();
+                EconomicSeats seat = new EconomicSeats();
                 seat.setBooked(false);
                 seat.setRowNumber(String.valueOf(i + 1));
                 seat.setColNumber(String.valueOf(j + 1));
-                seat.setSeatClass("Economic");
                 seat.setFlight(savedFlight);
-                savedFlight.getSeats().add(seat);
+                savedFlight.getEconomicseats().add(seat);
             }
         }
         return flightService.addFlight(savedFlight);
