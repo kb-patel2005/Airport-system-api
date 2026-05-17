@@ -1,5 +1,7 @@
 package com.airportSystem.airport_system.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,10 +32,12 @@ public class Seat {
 
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
+    @JsonBackReference
     private Flights flight;
 
     @ManyToOne
     @JoinColumn(name = "passenger_id")
+    @JsonBackReference
     private Passenger passenger;
 
     public Seat(String seatClass, String rowNumber, String colNumber, boolean isBooked) {

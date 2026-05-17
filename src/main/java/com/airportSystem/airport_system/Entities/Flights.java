@@ -3,6 +3,8 @@ package com.airportSystem.airport_system.Entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +33,7 @@ public class Flights {
     private String destinationcity;
     private int price;
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Seat> seats = new java.util.ArrayList<>();
 
 }

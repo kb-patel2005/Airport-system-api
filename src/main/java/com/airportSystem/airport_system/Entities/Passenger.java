@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.airportSystem.airport_system.Entities.Seat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @AllArgsConstructor
@@ -34,6 +35,7 @@ public class Passenger {
     @Lob
     private byte[] image;
     @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Seat> seats = new java.util.ArrayList<>();
 
 }
