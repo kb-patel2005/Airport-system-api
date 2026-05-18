@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(
+    name = "business_seats",
+    indexes = {
+        @jakarta.persistence.Index(name = "idx_flight_id", columnList = "flight_id"),
+        @jakarta.persistence.Index(name = "idx_passenger_id", columnList = "passenger_id")
+    }
+)
 public class BusinessSeats {
 
     @Id
