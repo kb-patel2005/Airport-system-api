@@ -6,7 +6,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.airportSystem.airport_system.Dao.BusinessSeatRepository;
+import com.airportSystem.airport_system.Dao.EconomicSeatRepository;
 import com.airportSystem.airport_system.Dao.Repository;
+import com.airportSystem.airport_system.Entities.BusinessSeats;
+import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Passenger;
 import com.airportSystem.airport_system.Service.AirportService;
@@ -16,6 +20,12 @@ public class AirportServiceImplementation implements AirportService {
 
     @Autowired
     private Repository repository;
+
+    @Autowired
+    private EconomicSeatRepository economicSeatRepository;
+
+    @Autowired
+    private BusinessSeatRepository businessSeatRepository;
 
     @Override
     public Passenger getPassengerData(long id) {
@@ -62,10 +72,28 @@ public class AirportServiceImplementation implements AirportService {
         if (passenger.isPresent()) {
             Passenger existingPassenger = passenger.get();
             if (flightAssign.getEconomicSeats() != null) {
-                existingPassenger.getEconomicseats().addAll(flightAssign.getEconomicSeats());
+                List<EconomicSeats> economicSeats = new java.util.ArrayList<>();
+                for (EconomicSeats seat : flightAssign.getEconomicSeats()) {
+                    EconomicSeats newSeat = economicSeatRepository.findByFlightIdAndRowNumberAndColNumber(flightAssign.getFlight().getId(), seat.getRowNumber(), seat.getColNumber());
+                    newSeat.setFlight(seat.getFlight());
+                    newSeat.setPassenger(existingPassenger);
+                    newSeat.setBooked(true);
+                    economicSeatRepository.save(newSeat);
+                    economicSeats.add(newSeat);
+                }
+                existingPassenger.getEconomicseats().addAll(economicSeats);
             }
             if (flightAssign.getBusinessSeats() != null) {
-                existingPassenger.getBusinessseats().addAll(flightAssign.getBusinessSeats());
+                List<BusinessSeats> businessSeats = new java.util.ArrayList<>();
+                for (BusinessSeats seat : flightAssign.getBusinessSeats()) {
+                    BusinessSeats newSeat = businessSeatRepository.findByFlightIdAndRowNumberAndColNumber(flightAssign.getFlight().getId(), seat.getRowNumber(), seat.getColNumber());
+                    newSeat.setFlight(seat.getFlight());
+                    newSeat.setPassenger(existingPassenger);
+                    newSeat.setBooked(true);
+                    businessSeatRepository.save(newSeat);
+                    businessSeats.add(newSeat);
+                }
+                existingPassenger.getBusinessseats().addAll(businessSeats);
             }
             repository.save(existingPassenger);
         } else {

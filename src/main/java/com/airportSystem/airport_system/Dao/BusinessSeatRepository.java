@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.airportSystem.airport_system.Entities.BusinessSeats;
 
 public interface BusinessSeatRepository extends JpaRepository<BusinessSeats, Long> {
+
+    BusinessSeats findByFlightIdAndRowNumberAndColNumber(Long id, String rowNumber, String colNumber);
     
 }

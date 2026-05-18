@@ -6,4 +6,6 @@ import com.airportSystem.airport_system.Entities.EconomicSeats;
 
 public interface EconomicSeatRepository extends JpaRepository<EconomicSeats, Long> {
     
+    public EconomicSeats findByFlightIdAndRowNumberAndColNumber(Long flightId, String rowNumber, String colNumber);
+
 }
