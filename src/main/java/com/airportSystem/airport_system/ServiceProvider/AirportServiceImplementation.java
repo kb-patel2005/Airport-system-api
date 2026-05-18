@@ -74,7 +74,7 @@ public class AirportServiceImplementation implements AirportService {
             if (flightAssign.getEconomicSeats() != null) {
                 List<EconomicSeats> economicSeats = new java.util.ArrayList<>();
                 for (EconomicSeats seat : flightAssign.getEconomicSeats()) {
-                    EconomicSeats newSeat = economicSeatRepository.findByFlightIdAndRowNumberAndColNumber(flightAssign.getFlight().getId(), seat.getRowNumber(), seat.getColNumber());
+                    EconomicSeats newSeat = economicSeatRepository.findByFlight_IdAndRowNumberAndColNumber(flightAssign.getFlight().getId(), seat.getRowNumber(), seat.getColNumber());
                     newSeat.setFlight(seat.getFlight());
                     newSeat.setPassenger(existingPassenger);
                     newSeat.setBooked(true);
@@ -86,7 +86,7 @@ public class AirportServiceImplementation implements AirportService {
             if (flightAssign.getBusinessSeats() != null) {
                 List<BusinessSeats> businessSeats = new java.util.ArrayList<>();
                 for (BusinessSeats seat : flightAssign.getBusinessSeats()) {
-                    BusinessSeats newSeat = businessSeatRepository.findByFlightIdAndRowNumberAndColNumber(flightAssign.getFlight().getId(), seat.getRowNumber(), seat.getColNumber());
+                    BusinessSeats newSeat = businessSeatRepository.findByFlight_IdAndRowNumberAndColNumber(flightAssign.getFlight().getId(), seat.getRowNumber(), seat.getColNumber());
                     newSeat.setFlight(seat.getFlight());
                     newSeat.setPassenger(existingPassenger);
                     newSeat.setBooked(true);

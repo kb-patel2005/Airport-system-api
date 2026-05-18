@@ -6,6 +6,6 @@ import com.airportSystem.airport_system.Entities.BusinessSeats;
 
 public interface BusinessSeatRepository extends JpaRepository<BusinessSeats, Long> {
 
-    BusinessSeats findByFlightIdAndRowNumberAndColNumber(Long id, String rowNumber, String colNumber);
+    BusinessSeats findByFlight_IdAndRowNumberAndColNumber(Long id, String rowNumber, String colNumber);
     
 }
