@@ -12,13 +12,13 @@ import org.springframework.data.domain.Pageable;
 public interface FlightService {
 
     Page<FlightDto> getAllFlights(Pageable pageable);
-    Optional<Flights> getFlightById(int id);
+    Optional<Flights> getFlightById(Long id);
     String addFlight(Flights flight);
     String updateFlight(Flights flight);
-    String deleteFlight(int id);
+    String deleteFlight(Long id);
     String cancelEconomicFlight(EconomicSeats seat);
     String cancelBusinessFlight(BusinessSeats seat);
-    List<List<Boolean>> getSeatsByClass(int id, String className);
+    List<List<Boolean>> getSeatsByClass(Long id, String className);
     Flights saveFlight(Flights flight);
 
 }

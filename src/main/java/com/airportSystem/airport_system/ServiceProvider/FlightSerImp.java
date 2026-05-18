@@ -34,7 +34,7 @@ public class FlightSerImp implements FlightService {
     }
 
     @Override
-    public Optional<Flights> getFlightById(int id) {
+    public Optional<Flights> getFlightById(Long id) {
         return flightRepository.findById(id);
     }
 
@@ -56,13 +56,13 @@ public class FlightSerImp implements FlightService {
     }
 
     @Override
-    public String deleteFlight(int id) {
+    public String deleteFlight(Long id) {
         flightRepository.deleteById(id);
         return "Flight cancelled successfully";
     }
 
     @Override
-    public List<List<Boolean>> getSeatsByClass(int id, String className) {
+    public List<List<Boolean>> getSeatsByClass(Long id, String className) {
         Optional<Flights> optionalFlight = flightRepository.findById(id);
         if (optionalFlight.isPresent()) {
             Flights flight = optionalFlight.get();

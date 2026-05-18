@@ -10,7 +10,7 @@ import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
 
 @Repository
-public interface FlightRepository extends JpaRepository<Flights, Integer>{
+public interface FlightRepository extends JpaRepository<Flights, Long>{
 
     @Query("SELECT new com.airportSystem.airport_system.Entities.FlightDto(f.id, f.airline,f.origincountry, f.originstate, f.origincity, f.destinationcountry, f.destinationstate, f.destinationcity, f.price) FROM Flights f")
     Page<FlightDto> findAllFlightsSummary(Pageable pageable);
