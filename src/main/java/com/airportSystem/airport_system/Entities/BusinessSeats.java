@@ -39,12 +39,12 @@ public class BusinessSeats {
 
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("businessSeatsRef")
     private Flights flight;
 
     @ManyToOne
     @JoinColumn(name = "passenger_id")
-    @JsonBackReference
+    @JsonBackReference("businessSeatsPassengerRef")
     private Passenger passenger;
 
     public BusinessSeats(String rowNumber, String colNumber, boolean isBooked) {

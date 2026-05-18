@@ -34,10 +34,10 @@ public class Passenger {
     @Lob
     private byte[] image;
     @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("economicSeatsPassengerRef")
     private List<EconomicSeats> economicseats = new java.util.ArrayList<>();
     @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("businessSeatsPassengerRef")
     private List<BusinessSeats> businessseats = new java.util.ArrayList<>();
 
 }

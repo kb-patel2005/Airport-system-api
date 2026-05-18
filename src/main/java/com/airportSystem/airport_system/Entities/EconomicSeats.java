@@ -39,12 +39,12 @@ public class EconomicSeats {
 
     @ManyToOne
     @JoinColumn(name = "flight_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("economicSeatsRef")
     private Flights flight;
 
     @ManyToOne
     @JoinColumn(name = "passenger_id")
-    @JsonBackReference
+    @JsonBackReference("economicSeatsPassengerRef")
     private Passenger passenger;
 
     public EconomicSeats(String rowNumber, String colNumber, boolean isBooked) {
