@@ -5,8 +5,8 @@ com\airportSystem\airport_system\Entities\Flights.class
 com\airportSystem\airport_system\Entities\LoginStaff.class
 com\airportSystem\airport_system\Service\AirportService.class
 com\airportSystem\airport_system\Controller\controller.class
+com\airportSystem\airport_system\Dao\PassengerRepository.class
 com\airportSystem\airport_system\Controller\FlightController.class
-com\airportSystem\airport_system\Dao\Repository.class
 com\airportSystem\airport_system\Dao\BusinessSeatRepository.class
 com\airportSystem\airport_system\Entities\Passenger.class
 com\airportSystem\airport_system\Controller\Staffcontroller.class
