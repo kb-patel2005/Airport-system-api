@@ -18,6 +18,8 @@ import com.airportSystem.airport_system.Entities.BusinessSeats;
 import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
+import com.airportSystem.airport_system.Entities.Seat;
+import com.airportSystem.airport_system.Entities.SeatKey;
 import com.airportSystem.airport_system.Service.FlightService;
 
 @RestController
@@ -29,7 +31,7 @@ public class FlightController {
 
     @GetMapping("/flight/{id}")
     public Flights getflightById(@PathVariable("id") Long id) {
-       return flightService.getFlightById(id).orElse(null);
+        return flightService.getFlightById(id).orElse(null);
     }
 
     @GetMapping("/allFlights")
@@ -38,31 +40,26 @@ public class FlightController {
     }
 
     @PostMapping("/addFlight")
-    public String addFlight(@RequestBody Flights flight){
-        flight.setEconomicseats(new ArrayList<>());
-        flight.setBusinessseats(new ArrayList<>());
+    public String addFlight(@RequestBody Flights flight) {
+        flight.setSeats(new ArrayList<>());
         Flights savedFlight = flightService.saveFlight(flight);
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                BusinessSeats seat = new BusinessSeats();
+        char[] columns = { 'A', 'B', 'C', 'D', 'E', 'F' };
+
+        savedFlight.setSeats(new ArrayList<>());
+
+        for (int row = 1; row <= 15; row++) { // rows 1–15
+            for (char col : columns) { // columns A–F
+                SeatKey seatKey = new SeatKey();
+                seatKey.setFlight(savedFlight);
+                seatKey.setSeatNumber(col + String.valueOf(row));
+                Seat seat = new Seat();
+                seat.setId(seatKey);
                 seat.setBooked(false);
-                seat.setRowNumber(String.valueOf(i + 1));
-                seat.setColNumber(String.valueOf(j + 1));
-                seat.setFlight(savedFlight);
-                savedFlight.getBusinessseats().add(seat);
+                seat.setPassenger(null);
+                savedFlight.getSeats().add(seat);
             }
         }
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 4; j++) {
-                EconomicSeats seat = new EconomicSeats();
-                seat.setBooked(false);
-                seat.setRowNumber(String.valueOf(i + 1));
-                seat.setColNumber(String.valueOf(j + 1));
-                seat.setFlight(savedFlight);
-                savedFlight.getEconomicseats().add(seat);
-            }
-        }
-        return flightService.addFlight(savedFlight);
+        return flightService.addFlight(flight);
     }
 
     @DeleteMapping("/deleteFlight/{id}")
@@ -70,8 +67,8 @@ public class FlightController {
         return flightService.deleteFlight(id);
     }
 
-    @GetMapping("/{id}/seats/{className}")
-    public List<List<Boolean>> getSeatsByClass(@PathVariable("id") Long id, @PathVariable("className") String className) {
-        return flightService.getSeatsByClass(id, className);
+    @GetMapping("/{id}/seats")
+    public List<List<Boolean>> getSeatsByClass(@PathVariable("id") Long id) {
+        return flightService.getSeatsByClass(id);
     }
 }

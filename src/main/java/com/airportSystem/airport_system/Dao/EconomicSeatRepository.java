@@ -6,8 +6,10 @@ import org.springframework.stereotype.Repository;
 import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.Flights;
 
-@Repository
-public interface EconomicSeatRepository extends JpaRepository<EconomicSeats, Long> {
+// @Repository
+public interface EconomicSeatRepository 
+// extends JpaRepository<EconomicSeats, Long> 
+{
     
     public EconomicSeats findByFlightAndRowNumberAndColNumber(Flights flight, String rowNumber, String colNumber);
 

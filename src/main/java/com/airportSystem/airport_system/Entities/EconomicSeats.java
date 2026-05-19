@@ -17,18 +17,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity
-@Table(
-    name = "economic_seats",
-    indexes = {
-        @jakarta.persistence.Index(name = "idx_flight_id", columnList = "flight_id"),
-        @jakarta.persistence.Index(name = "idx_passenger_id", columnList = "passenger_id")
-    }
-)
+// @Entity
+// @Table(
+//     name = "economic_seats",
+//     indexes = {
+//         @jakarta.persistence.Index(name = "idx_flight_id", columnList = "flight_id"),
+//         @jakarta.persistence.Index(name = "idx_passenger_id", columnList = "passenger_id")
+//     }
+// )
 public class EconomicSeats {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "seat_row")
     private String rowNumber;

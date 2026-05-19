@@ -82,31 +82,28 @@ public class controller {
         if (passenger == null) {
             return "Passenger already deleted or not found";
         }
-        passenger.getBusinessseats().forEach(seat -> {
-            flightService.cancelBusinessFlight(seat);
-        });
-        passenger.getEconomicseats().forEach(seat -> {
-            flightService.cancelEconomicFlight(seat);
-        });
+        if (passenger.getSeats() != null && !passenger.getSeats().isEmpty()) {
+            flightService.cancelFlightBooking(passenger.getSeats());
+        }
         return service.deletePassenger(id);
     }
 
-    @PostMapping("/cancelEBooking")
-    public void cancelEconomicBooking(@RequestBody EconomicSeats seat) {
-        try {
-            flightService.cancelEconomicFlight(seat);
-        } catch (Exception e) {
-            throw e;
-        }
-    }
+    // @PostMapping("/cancelEBooking")
+    // public void cancelEconomicBooking(@RequestBody EconomicSeats seat) {
+    //     try {
+    //         flightService.cancelEconomicFlight(seat);
+    //     } catch (Exception e) {
+    //         throw e;
+    //     }
+    // }
 
-    @PostMapping("/cancelBBooking")
-    public void cancelBusinessBooking(@RequestBody BusinessSeats seat) {
-        try {
-            flightService.cancelBusinessFlight(seat);
-        } catch (Exception e) {
-            throw e;
-        }
-    }
+    // @PostMapping("/cancelBBooking")
+    // public void cancelBusinessBooking(@RequestBody BusinessSeats seat) {
+    //     try {
+    //         flightService.cancelBusinessFlight(seat);
+    //     } catch (Exception e) {
+    //         throw e;
+    //     }
+    // }
 
 }
