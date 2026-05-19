@@ -11,6 +11,7 @@ c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\air
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Dao\EconomicSeatRepository.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Dao\FlightRepository.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Dao\PassengerRepository.java
+c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Dao\SeatRepository.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Dao\StaffRepository.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Entities\BusinessSeats.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Entities\EconomicSeats.java
@@ -19,6 +20,8 @@ c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\air
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Entities\Flights.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Entities\LoginStaff.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Entities\Passenger.java
+c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Entities\Seat.java
+c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Entities\SeatKey.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Entities\Staff.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Entities\Stafftextdata.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Service\AirportService.java

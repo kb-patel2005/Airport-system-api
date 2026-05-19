@@ -1,5 +1,6 @@
 com\airportSystem\airport_system\Service\StaffService.class
 com\airportSystem\airport_system\Entities\EconomicSeats.class
+com\airportSystem\airport_system\Entities\Seat.class
 com\airportSystem\airport_system\Dao\StaffRepository.class
 com\airportSystem\airport_system\Entities\Flights.class
 com\airportSystem\airport_system\Entities\LoginStaff.class
@@ -7,6 +8,7 @@ com\airportSystem\airport_system\Service\AirportService.class
 com\airportSystem\airport_system\Controller\controller.class
 com\airportSystem\airport_system\Dao\PassengerRepository.class
 com\airportSystem\airport_system\Controller\FlightController.class
+com\airportSystem\airport_system\Dao\SeatRepository.class
 com\airportSystem\airport_system\Dao\BusinessSeatRepository.class
 com\airportSystem\airport_system\Entities\Passenger.class
 com\airportSystem\airport_system\Controller\Staffcontroller.class
@@ -23,6 +25,7 @@ com\airportSystem\airport_system\Controller\AuthResponse.class
 com\airportSystem\airport_system\Entities\Stafftextdata.class
 com\airportSystem\airport_system\Dao\EconomicSeatRepository.class
 com\airportSystem\airport_system\Service\FlightService.class
+com\airportSystem\airport_system\Entities\SeatKey.class
 com\airportSystem\airport_system\Controller\AuthController.class
 com\airportSystem\airport_system\Entities\FlightAssign.class
 com\airportSystem\airport_system\ServiceProvider\AirportServiceImplementation.class

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.airportSystem.airport_system.Dao.SeatRepository;
 import com.airportSystem.airport_system.Entities.BusinessSeats;
 import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightDto;
@@ -28,6 +29,9 @@ public class FlightController {
 
     @Autowired
     private FlightService flightService;
+
+    @Autowired
+    private SeatRepository seatRepository;
 
     @GetMapping("/flight/{id}")
     public Flights getflightById(@PathVariable("id") Long id) {
@@ -56,7 +60,7 @@ public class FlightController {
                 seat.setId(seatKey);
                 seat.setBooked(false);
                 seat.setPassenger(null);
-                savedFlight.getSeats().add(seat);
+                savedFlight.getSeats().add(seatRepository.save(seat));
             }
         }
         return flightService.addFlight(flight);
