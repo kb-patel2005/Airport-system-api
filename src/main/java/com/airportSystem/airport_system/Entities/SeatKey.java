@@ -1,5 +1,6 @@
 package com.airportSystem.airport_system.Entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
@@ -13,12 +14,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class SeatKey implements Serializable {
 
-    @ManyToOne
-    @JoinColumn(name = "flight_id", nullable = false)
-    @JsonBackReference("SeatsRef")
-    private Flights flight;
+    @Column(name = "flight_id")
+    private Long flightId;   // just the ID, not the entity
 
+    @Column(name = "seat_number")
     private String seatNumber;
-    
 }
 

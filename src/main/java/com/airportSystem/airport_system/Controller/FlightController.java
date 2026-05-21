@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.airportSystem.airport_system.Dao.SeatRepository;
-import com.airportSystem.airport_system.Entities.BusinessSeats;
-import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
 import com.airportSystem.airport_system.Entities.Seat;
@@ -54,7 +52,7 @@ public class FlightController {
         for (int row = 1; row <= 15; row++) { // rows 1–15
             for (char col : columns) { // columns A–F
                 SeatKey seatKey = new SeatKey();
-                seatKey.setFlight(savedFlight);
+                seatKey.setFlightId(savedFlight.getId());
                 seatKey.setSeatNumber(col + String.valueOf(row));
                 Seat seat = new Seat();
                 seat.setId(seatKey);

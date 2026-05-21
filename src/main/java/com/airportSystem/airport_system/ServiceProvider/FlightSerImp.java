@@ -7,12 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.airportSystem.airport_system.Dao.BusinessSeatRepository;
-import com.airportSystem.airport_system.Dao.EconomicSeatRepository;
 import com.airportSystem.airport_system.Dao.FlightRepository;
 import com.airportSystem.airport_system.Dao.SeatRepository;
-import com.airportSystem.airport_system.Entities.BusinessSeats;
-import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
 import com.airportSystem.airport_system.Entities.Seat;
@@ -23,12 +19,6 @@ public class FlightSerImp implements FlightService {
 
     @Autowired
     private FlightRepository flightRepository;
-
-    // @Autowired
-    // private EconomicSeatRepository economicSeatRepository;
-
-    // @Autowired
-    // private BusinessSeatRepository businessSeatRepository;
 
     @Autowired
     private SeatRepository seatRepository;

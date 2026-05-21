@@ -32,7 +32,7 @@ public class Flights {
     private String destinationstate;
     private String destinationcity;
     private int price;
-    @OneToMany(mappedBy = "id.flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("SeatsRef")
     private List<Seat> seats = new java.util.ArrayList<>();
     // @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)

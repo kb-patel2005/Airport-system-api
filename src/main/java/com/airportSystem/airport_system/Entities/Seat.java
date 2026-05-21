@@ -21,9 +21,15 @@ import lombok.NoArgsConstructor;
 public class Seat {
 
     @EmbeddedId
-    private SeatKey id;  // PRIMARY KEY = flight + seatNumber
+    private SeatKey id;  // PRIMARY KEY = flight_id + seat_number
 
     private boolean isBooked;
+
+    @ManyToOne
+    @MapsId("flightId")   // maps composite key field
+    @JoinColumn(name = "flight_id", nullable = false)
+    @JsonBackReference("SeatsRef")
+    private Flights flight;
 
     @ManyToOne
     @JoinColumn(name = "passenger_id")
