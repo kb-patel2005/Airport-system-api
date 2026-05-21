@@ -46,24 +46,26 @@ public class FlightController {
         Flights savedFlight = flightService.saveFlight(flight);
         char[] columns = { 'A', 'B', 'C', 'D', 'E', 'F' };
 
-        savedFlight.setSeats(new ArrayList<>());
+        List<Seat> seats = new ArrayList<>();
 
         for (int row = 1; row <= 15; row++) {
             for (char col : columns) {
                 SeatKey seatKey = new SeatKey();
                 seatKey.setFlightId(savedFlight.getId());
-                seatKey.setSeatNumber(String.valueOf(col) + row); 
+                seatKey.setSeatNumber(String.valueOf(col) + row);
                 Seat seat = new Seat();
                 seat.setId(seatKey);
                 seat.setFlight(savedFlight);
                 seat.setBooked(false);
                 seat.setPassenger(null);
-                savedFlight.getSeats().add(seat);
+                seats.add(seat);
             }
         }
-        seatRepository.saveAll(savedFlight.getSeats()); // ✅ batch insert
+        seatRepository.saveAll(seats);
+        savedFlight.setSeats(seats);
 
-        return flightService.addFlight(flight);
+        // persist flight with seats
+        return flightService.addFlight(savedFlight);
     }
 
     @DeleteMapping("/deleteFlight/{id}")
