@@ -43,7 +43,6 @@ public class FlightController {
 
     @PostMapping("/addFlight")
     public String addFlight(@RequestBody Flights flight) {
-        flight.setSeats(new ArrayList<>());
         Flights savedFlight = flightService.saveFlight(flight);
         char[] columns = { 'A', 'B', 'C', 'D', 'E', 'F' };
 
@@ -56,6 +55,7 @@ public class FlightController {
                 seatKey.setSeatNumber(col + String.valueOf(row));
                 Seat seat = new Seat();
                 seat.setId(seatKey);
+                seat.setFlight(savedFlight);
                 seat.setBooked(false);
                 seat.setPassenger(null);
                 savedFlight.getSeats().add(seatRepository.save(seat));
