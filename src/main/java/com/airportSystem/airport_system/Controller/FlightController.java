@@ -48,19 +48,21 @@ public class FlightController {
 
         savedFlight.setSeats(new ArrayList<>());
 
-        for (int row = 1; row <= 15; row++) { // rows 1–15
-            for (char col : columns) { // columns A–F
+        for (int row = 1; row <= 15; row++) {
+            for (char col : columns) {
                 SeatKey seatKey = new SeatKey();
                 seatKey.setFlightId(savedFlight.getId());
-                seatKey.setSeatNumber(col + String.valueOf(row));
+                seatKey.setSeatNumber(String.valueOf(col) + row); 
                 Seat seat = new Seat();
                 seat.setId(seatKey);
                 seat.setFlight(savedFlight);
                 seat.setBooked(false);
                 seat.setPassenger(null);
-                savedFlight.getSeats().add(seatRepository.save(seat));
+                savedFlight.getSeats().add(seat);
             }
         }
+        seatRepository.saveAll(savedFlight.getSeats()); // ✅ batch insert
+
         return flightService.addFlight(flight);
     }
 
