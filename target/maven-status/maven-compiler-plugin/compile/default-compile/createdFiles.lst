@@ -22,6 +22,7 @@ com\airportSystem\airport_system\Entities\FlightDto.class
 com\airportSystem\airport_system\Config\JwtFilter.class
 com\airportSystem\airport_system\Controller\AuthRequest.class
 com\airportSystem\airport_system\Dao\FlightRepository.class
+com\airportSystem\airport_system\Entities\DisplaySeats.class
 com\airportSystem\airport_system\Controller\AuthResponse.class
 com\airportSystem\airport_system\Entities\Stafftextdata.class
 com\airportSystem\airport_system\Dao\EconomicSeatRepository.class

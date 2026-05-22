@@ -1,5 +1,6 @@
 package com.airportSystem.airport_system.ServiceProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import com.airportSystem.airport_system.Dao.FlightRepository;
 import com.airportSystem.airport_system.Dao.PassengerRepository;
 import com.airportSystem.airport_system.Dao.SeatRepository;
 import com.airportSystem.airport_system.Entities.BusinessSeats;
+import com.airportSystem.airport_system.Entities.DisplaySeats;
 import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Flights;
@@ -34,15 +36,6 @@ public class AirportServiceImplementation implements AirportService {
 
     @Autowired
     private SeatRepository seatRepository;
-
-    // @Autowired
-    // private EconomicSeatRepository economicSeatRepository;
-
-    // @Autowired
-    // private BusinessSeatRepository businessSeatRepository;
-
-    // @Autowired
-    // private FlightRepository flightRepository;
 
     @Override
     public Passenger getPassengerData(long id) {
@@ -114,6 +107,33 @@ public class AirportServiceImplementation implements AirportService {
         }
 
         repository.save(passenger); // cascade saves seats
+    }
+
+    @Override
+    public List<DisplaySeats> getAllSeatsOfPassenger(String id) {
+        Long pId = Long.parseLong(id);
+        Optional<Passenger> passenger = repository.findById(pId);
+        List<DisplaySeats> seats = new ArrayList<>();
+        if(passenger.isPresent()){
+            for (Seat seat : passenger.get().getSeats()) {
+                Optional<Flights> flight = flightRepository.findById(seat.getId().getFlightId());
+                DisplaySeats dSeats = new DisplaySeats();
+                dSeats.setFlightId(seat.getId().getFlightId());
+                dSeats.setFrom(flight.get().getOrigincity()+" ,"+flight.get().getOriginstate()+" ,"+flight.get().getOrigincountry());
+                dSeats.setTo(flight.get().getDestinationcity()+" ,"+flight.get().getDestinationstate()+" ,"+flight.get().getDestinationcountry());
+                dSeats.setSeatNumber(seat.getId().getSeatNumber());
+                int price = flight.get().getPrice();
+                int seatRow = Integer.parseInt(seat.getId().getSeatNumber().substring(1));
+                if(seatRow <= 6){
+                    dSeats.setPrice(price);
+                }else{
+                    dSeats.setPrice(price * 1.5);
+                }
+                seats.add(dSeats);
+            }
+            return seats;
+        }
+        return null;
     }
 
 }

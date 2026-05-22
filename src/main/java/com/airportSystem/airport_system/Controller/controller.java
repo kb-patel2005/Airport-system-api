@@ -1,5 +1,7 @@
 package com.airportSystem.airport_system.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.airportSystem.airport_system.Entities.BusinessSeats;
+import com.airportSystem.airport_system.Entities.DisplaySeats;
 import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.LoginStaff;
 import com.airportSystem.airport_system.Entities.Passenger;
+import com.airportSystem.airport_system.Entities.Seat;
 import com.airportSystem.airport_system.Entities.Stafftextdata;
 import com.airportSystem.airport_system.Service.AirportService;
 import com.airportSystem.airport_system.Service.FlightService;
@@ -86,6 +90,11 @@ public class controller {
             flightService.cancelFlightBooking(passenger.getSeats());
         }
         return service.deletePassenger(id);
+    }
+
+    @GetMapping("/passengerSeats/{id}")
+    public List<DisplaySeats> getAllPassengerSeats(@PathVariable("id") String id){
+        return service.getAllSeatsOfPassenger(id);
     }
 
     // @PostMapping("/cancelEBooking")
