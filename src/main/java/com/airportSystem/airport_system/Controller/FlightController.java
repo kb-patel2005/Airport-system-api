@@ -63,8 +63,6 @@ public class FlightController {
         }
         seatRepository.saveAll(seats);
         savedFlight.setSeats(seats);
-
-        // persist flight with seats
         return flightService.addFlight(savedFlight);
     }
 

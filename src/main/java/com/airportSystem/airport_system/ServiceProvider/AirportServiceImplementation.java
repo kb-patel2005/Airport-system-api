@@ -16,7 +16,11 @@ import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Flights;
 import com.airportSystem.airport_system.Entities.Passenger;
+import com.airportSystem.airport_system.Entities.Seat;
+import com.airportSystem.airport_system.Entities.SeatKey;
 import com.airportSystem.airport_system.Service.AirportService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AirportServiceImplementation implements AirportService {
@@ -78,19 +82,26 @@ public class AirportServiceImplementation implements AirportService {
     }
 
     @Override
+    @Transactional
     public void addFlightToPassenger(FlightAssign flightAssign) {
-        Optional<Passenger> passenger = repository.findById(flightAssign.getPassengerId());
-        if (passenger.isPresent()) {
-            Passenger existingPassenger = passenger.get();
-            if (existingPassenger.getSeats() == null) {
-                existingPassenger.setSeats(flightAssign.getSeats());
-            } else {
-                existingPassenger.getSeats().addAll(flightAssign.getSeats());
-                repository.save(existingPassenger);
-            }
-        } else {
-            System.out.println("Passenger not found with ID: " + flightAssign.getPassengerId());
+        Passenger passenger = repository.findById(flightAssign.getPassengerId())
+                .orElseThrow(() -> new RuntimeException("Passenger not found"));
+
+        Flights flight = flightRepository.findById(flightAssign.getFlight().getId())
+                .orElseThrow(() -> new RuntimeException("Flight not found"));
+
+        for (Seat seat : flightAssign.getSeats()) {
+            // Build composite key
+            SeatKey key = new SeatKey(flight.getId(), seat.getId().getSeatNumber());
+
+            seat.setId(key);
+            seat.setFlight(flight); 
+            seat.setPassenger(passenger); 
+
+            passenger.getSeats().add(seat);
         }
+
+        repository.save(passenger); // cascade will save seats
     }
 
 }
