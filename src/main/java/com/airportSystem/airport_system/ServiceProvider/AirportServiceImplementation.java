@@ -17,6 +17,7 @@ import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Flights;
 import com.airportSystem.airport_system.Entities.Passenger;
 import com.airportSystem.airport_system.Entities.Seat;
+import com.airportSystem.airport_system.Entities.SeatDto;
 import com.airportSystem.airport_system.Entities.SeatKey;
 import com.airportSystem.airport_system.Service.AirportService;
 
@@ -90,18 +91,29 @@ public class AirportServiceImplementation implements AirportService {
         Flights flight = flightRepository.findById(flightAssign.getFlight().getId())
                 .orElseThrow(() -> new RuntimeException("Flight not found"));
 
-        for (Seat seat : flightAssign.getSeats()) {
-            // Build composite key
-            SeatKey key = new SeatKey(flight.getId(), seat.getId().getSeatNumber());
+        for (SeatDto seatDto : flightAssign.getSeats()) {
+            SeatKey key = new SeatKey(flight.getId(), seatDto.getSeatNumber());
 
-            seat.setId(key);
-            seat.setFlight(flight); 
-            seat.setPassenger(passenger); 
+            Seat seat = seatRepository.findById(key).orElse(null);
+
+            if (seat != null) {
+                if (seat.isBooked()) {
+                    throw new RuntimeException("Seat " + seatDto.getSeatNumber() + " is already booked");
+                }
+            } else {
+                // create new seat if not exists
+                seat = new Seat();
+                seat.setId(key);
+                seat.setFlight(flight);
+            }
+
+            seat.setBooked(true);
+            seat.setPassenger(passenger);
 
             passenger.getSeats().add(seat);
         }
 
-        repository.save(passenger); // cascade will save seats
+        repository.save(passenger); // cascade saves seats
     }
 
 }

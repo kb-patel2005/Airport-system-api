@@ -8,6 +8,6 @@ public class FlightAssign {
 
     private Long passengerId;
     private Flights flight;
-    private List<Seat> seats;
+    private List<SeatDto> seats;
     
 }
