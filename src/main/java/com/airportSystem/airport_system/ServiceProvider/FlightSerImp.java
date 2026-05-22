@@ -12,6 +12,7 @@ import com.airportSystem.airport_system.Dao.SeatRepository;
 import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
 import com.airportSystem.airport_system.Entities.Seat;
+import com.airportSystem.airport_system.Entities.SeatKey;
 import com.airportSystem.airport_system.Service.FlightService;
 
 @Service
@@ -91,28 +92,30 @@ public class FlightSerImp implements FlightService {
 
     // @Override
     // public String cancelEconomicFlight(EconomicSeats seat) {
-    //     EconomicSeats existingSeat = economicSeatRepository.findById(seat.getId()).orElse(null);
-    //     if (existingSeat != null) {
-    //         existingSeat.setBooked(false);
-    //         existingSeat.setPassenger(null);
-    //         economicSeatRepository.save(existingSeat);
-    //         return "Economic seat cancelled successfully";
-    //     } else {
-    //         return "Economic seat not found";
-    //     }
+    // EconomicSeats existingSeat =
+    // economicSeatRepository.findById(seat.getId()).orElse(null);
+    // if (existingSeat != null) {
+    // existingSeat.setBooked(false);
+    // existingSeat.setPassenger(null);
+    // economicSeatRepository.save(existingSeat);
+    // return "Economic seat cancelled successfully";
+    // } else {
+    // return "Economic seat not found";
+    // }
     // }
 
     // @Override
     // public String cancelBusinessFlight(BusinessSeats seat) {
-    //     BusinessSeats existingSeat = businessSeatRepository.findById(seat.getId()).orElse(null);
-    //     if (existingSeat != null) {
-    //         existingSeat.setBooked(false);
-    //         existingSeat.setPassenger(null);
-    //         businessSeatRepository.save(existingSeat);
-    //         return "Business seat cancelled successfully";
-    //     } else {
-    //         return "Business seat not found";
-    //     }
+    // BusinessSeats existingSeat =
+    // businessSeatRepository.findById(seat.getId()).orElse(null);
+    // if (existingSeat != null) {
+    // existingSeat.setBooked(false);
+    // existingSeat.setPassenger(null);
+    // businessSeatRepository.save(existingSeat);
+    // return "Business seat cancelled successfully";
+    // } else {
+    // return "Business seat not found";
+    // }
     // }
 
     @Override
@@ -124,6 +127,17 @@ public class FlightSerImp implements FlightService {
                 seatRepository.save(seat);
             }
         });
-        
+
+    }
+
+    @Override
+    public Boolean cancelSeat(String id, String seatNumber) {
+        try {
+            SeatKey seatKey = new SeatKey(Long.parseLong(id), seatNumber);
+            seatRepository.deleteById(seatKey);
+            return true;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

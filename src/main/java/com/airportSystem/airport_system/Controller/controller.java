@@ -92,6 +92,11 @@ public class controller {
         return service.deletePassenger(id);
     }
 
+    @DeleteMapping("/cancelSeat/{id}/{seatNumber}")
+    public boolean cancelseat(@PathVariable("id") String id,@PathVariable("seatNumber") String seatNumber){
+        return flightService.cancelSeat(id,seatNumber);
+    }
+
     @GetMapping("/passengerSeats/{id}")
     public List<DisplaySeats> getAllPassengerSeats(@PathVariable("id") String id){
         return service.getAllSeatsOfPassenger(id);

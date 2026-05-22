@@ -22,4 +22,5 @@ public interface FlightService {
     List<List<Boolean>> getSeatsByClass(Long id);
     Flights saveFlight(Flights flight);
     void cancelFlightBooking(List<Seat> seats);
+    Boolean cancelSeat(String id, String seatNumber);
 }
