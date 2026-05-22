@@ -82,12 +82,15 @@ public class AirportServiceImplementation implements AirportService {
         Optional<Passenger> passenger = repository.findById(flightAssign.getPassengerId());
         if (passenger.isPresent()) {
             Passenger existingPassenger = passenger.get();
-            existingPassenger.getSeats().addAll(flightAssign.getFlight().getSeats());
-            repository.save(existingPassenger);
+            if (existingPassenger.getSeats() == null) {
+                existingPassenger.setSeats(flightAssign.getSeats());
+            } else {
+                existingPassenger.getSeats().addAll(flightAssign.getSeats());
+                repository.save(existingPassenger);
+            }
         } else {
             System.out.println("Passenger not found with ID: " + flightAssign.getPassengerId());
         }
     }
-
 
 }
