@@ -10,6 +10,7 @@ import com.airportSystem.airport_system.Dao.BusinessSeatRepository;
 import com.airportSystem.airport_system.Dao.EconomicSeatRepository;
 import com.airportSystem.airport_system.Dao.FlightRepository;
 import com.airportSystem.airport_system.Dao.PassengerRepository;
+import com.airportSystem.airport_system.Dao.SeatRepository;
 import com.airportSystem.airport_system.Entities.BusinessSeats;
 import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightAssign;
@@ -22,6 +23,12 @@ public class AirportServiceImplementation implements AirportService {
 
     @Autowired
     private PassengerRepository repository;
+
+    @Autowired
+    private FlightRepository flightRepository;
+
+    @Autowired
+    private SeatRepository seatRepository;
 
     // @Autowired
     // private EconomicSeatRepository economicSeatRepository;
@@ -71,37 +78,11 @@ public class AirportServiceImplementation implements AirportService {
     }
 
     @Override
-    public void addFlightId(FlightAssign flightAssign) {
+    public void addFlightToPassenger(FlightAssign flightAssign) {
         Optional<Passenger> passenger = repository.findById(flightAssign.getPassengerId());
         if (passenger.isPresent()) {
             Passenger existingPassenger = passenger.get();
-            // if ((flightAssign.getEconomicSeats()).size() > 0) {
-            //     List<EconomicSeats> economicSeats = new java.util.ArrayList<>();
-            //     for (EconomicSeats seat : flightAssign.getEconomicSeats()) {
-            //         Flights flights = flightRepository.findById(flightAssign.getFlight().getId()).orElse(null);
-            //         EconomicSeats newSeateEconomicSeats = economicSeatRepository.findByFlightAndRowNumberAndColNumber(flights, seat.getRowNumber(), seat.getColNumber());
-            //         newSeateEconomicSeats.setFlight(flights);
-            //         newSeateEconomicSeats.setPassenger(existingPassenger);
-            //         newSeateEconomicSeats.setBooked(true);
-            //         economicSeatRepository.save(newSeateEconomicSeats);
-            //         economicSeats.add(newSeateEconomicSeats);
-            //     }
-            //     existingPassenger.getEconomicseats().addAll(economicSeats);
-            // }
-            // if ((flightAssign.getBusinessSeats()).size() > 0 || (flightAssign.getBusinessSeats()) != null) {
-            //     List<BusinessSeats> businessSeats = new java.util.ArrayList<>();
-            //     for (BusinessSeats seat : flightAssign.getBusinessSeats()) {
-            //         Flights flights = flightRepository.findById(flightAssign.getFlight().getId()).orElse(null);
-            //         BusinessSeats newSeat = businessSeatRepository.findByFlightAndRowNumberAndColNumber(flights, seat.getRowNumber(), seat.getColNumber());
-            //         newSeat.setFlight(flights);
-            //         newSeat.setPassenger(existingPassenger);
-            //         newSeat.setBooked(true);
-            //         businessSeatRepository.save(newSeat);
-            //         businessSeats.add(newSeat);
-            //     }
-            //     existingPassenger.getBusinessseats().addAll(businessSeats);
-            // }
-            
+            existingPassenger.getSeats().addAll(flightAssign.getFlight().getSeats());
             repository.save(existingPassenger);
         } else {
             System.out.println("Passenger not found with ID: " + flightAssign.getPassengerId());

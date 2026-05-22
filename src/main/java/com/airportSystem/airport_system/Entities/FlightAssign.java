@@ -8,7 +8,6 @@ public class FlightAssign {
 
     private Long passengerId;
     private Flights flight;
-    private List<EconomicSeats> economicSeats;
-    private List<BusinessSeats> businessSeats;
+    private List<Seat> seats;
     
 }

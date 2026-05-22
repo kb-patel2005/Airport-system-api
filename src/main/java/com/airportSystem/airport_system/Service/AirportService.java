@@ -15,6 +15,6 @@ public interface AirportService {
 
     public Passenger findByEmailAndPassword(String email, String password);
 
-    public void addFlightId(FlightAssign flightAssign);
+    public void addFlightToPassenger(FlightAssign flightAssign);
 
 }

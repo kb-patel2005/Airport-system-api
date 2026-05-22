@@ -67,10 +67,10 @@ public class controller {
         return service.addPassenger(passenger);
     }
 
-    @PutMapping("/addFlight")
+    @PutMapping("/bookFlight")
     public void updatePassenger(@RequestBody FlightAssign request) {
         try {
-            service.addFlightId(request);
+            service.addFlightToPassenger(request);
         } catch (Exception e) {
             throw e;
         }
