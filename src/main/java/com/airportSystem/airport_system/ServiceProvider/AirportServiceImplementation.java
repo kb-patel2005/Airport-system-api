@@ -129,18 +129,18 @@ public class AirportServiceImplementation implements AirportService {
         List<DisplaySeats> seats = new ArrayList<>();
         if(passenger.isPresent()){
             for (Seat seat : passenger.get().getSeats()) {
-                Optional<Flights> flight = flightRepository.findById(seat.getId().getFlightId());
+                // Optional<Flights> flight = flightRepository.findById(seat.getId().getFlightId());
                 DisplaySeats dSeats = new DisplaySeats();
                 dSeats.setFlightId(seat.getId().getFlightId());
-                dSeats.setFrom(flight.get().getOrigincity()+" ,"+flight.get().getOriginstate()+" ,"+flight.get().getOrigincountry());
-                dSeats.setTo(flight.get().getDestinationcity()+" ,"+flight.get().getDestinationstate()+" ,"+flight.get().getDestinationcountry());
+                dSeats.setFrom(seat.getFlight().getOrigincountry()+" ,"+seat.getFlight().getOriginstate()+" ,"+seat.getFlight().getOrigincity());
+                dSeats.setTo(seat.getFlight().getDestinationcity()+" ,"+seat.getFlight().getDestinationstate()+" ,"+seat.getFlight().getDestinationcountry());
                 dSeats.setSeatNumber(seat.getId().getSeatNumber());
-                int price = flight.get().getPrice();
+                int price = seat.getFlight().getPrice();
                 int seatRow = Integer.parseInt(seat.getId().getSeatNumber().substring(1));
                 if(seatRow <= 6){
                     dSeats.setPrice(price);
                 }else{
-                    dSeats.setPrice(price * 1.5);
+                    dSeats.setPrice(Math.ceil(price * 1.5));
                 }
                 seats.add(dSeats);
             }
