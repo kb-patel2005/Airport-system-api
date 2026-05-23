@@ -17,13 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.airportSystem.airport_system.Entities.BusinessSeats;
 import com.airportSystem.airport_system.Entities.DisplaySeats;
-import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.LoginStaff;
 import com.airportSystem.airport_system.Entities.Passenger;
-import com.airportSystem.airport_system.Entities.Seat;
 import com.airportSystem.airport_system.Entities.Stafftextdata;
 import com.airportSystem.airport_system.Service.AirportService;
 import com.airportSystem.airport_system.Service.FlightService;

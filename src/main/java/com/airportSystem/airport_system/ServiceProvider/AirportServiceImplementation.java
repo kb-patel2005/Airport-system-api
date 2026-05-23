@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.airportSystem.airport_system.Dao.BusinessSeatRepository;
@@ -21,6 +22,7 @@ import com.airportSystem.airport_system.Entities.Passenger;
 import com.airportSystem.airport_system.Entities.Seat;
 import com.airportSystem.airport_system.Entities.SeatDto;
 import com.airportSystem.airport_system.Entities.SeatKey;
+import com.airportSystem.airport_system.Entities.SendSeat;
 import com.airportSystem.airport_system.Service.AirportService;
 
 import jakarta.transaction.Transactional;
@@ -36,6 +38,9 @@ public class AirportServiceImplementation implements AirportService {
 
     @Autowired
     private SeatRepository seatRepository;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @Override
     public Passenger getPassengerData(long id) {
@@ -84,8 +89,11 @@ public class AirportServiceImplementation implements AirportService {
         Flights flight = flightRepository.findById(flightAssign.getFlight().getId())
                 .orElseThrow(() -> new RuntimeException("Flight not found"));
 
+        List<String> seats = new ArrayList<>();
+
         for (SeatDto seatDto : flightAssign.getSeats()) {
             SeatKey key = new SeatKey(flight.getId(), seatDto.getSeatNumber());
+            seats.add(seatDto.getSeatNumber());
 
             Seat seat = seatRepository.findById(key).orElse(null);
 
@@ -104,9 +112,14 @@ public class AirportServiceImplementation implements AirportService {
             seat.setPassenger(passenger);
 
             passenger.getSeats().add(seat);
+            
         }
 
-        repository.save(passenger); // cascade saves seats
+        SendSeat update = new SendSeat(seats,true);
+
+        messagingTemplate.convertAndSend("/topic/messages/" + flightAssign.getFlight().getId(), update);
+
+        repository.save(passenger); 
     }
 
     @Override
