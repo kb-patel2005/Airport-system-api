@@ -7,8 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.airportSystem.airport_system.Dao.BookingRepository;
 import com.airportSystem.airport_system.Dao.FlightRepository;
 import com.airportSystem.airport_system.Dao.SeatRepository;
+import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
 import com.airportSystem.airport_system.Entities.Seat;
@@ -23,6 +25,9 @@ public class FlightSerImp implements FlightService {
 
     @Autowired
     private SeatRepository seatRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
 
     @Override
     public Page<FlightDto> getAllFlights(Pageable pageable) {
@@ -90,54 +95,32 @@ public class FlightSerImp implements FlightService {
         }
     }
 
-    // @Override
-    // public String cancelEconomicFlight(EconomicSeats seat) {
-    // EconomicSeats existingSeat =
-    // economicSeatRepository.findById(seat.getId()).orElse(null);
-    // if (existingSeat != null) {
-    // existingSeat.setBooked(false);
-    // existingSeat.setPassenger(null);
-    // economicSeatRepository.save(existingSeat);
-    // return "Economic seat cancelled successfully";
-    // } else {
-    // return "Economic seat not found";
-    // }
-    // }
-
-    // @Override
-    // public String cancelBusinessFlight(BusinessSeats seat) {
-    // BusinessSeats existingSeat =
-    // businessSeatRepository.findById(seat.getId()).orElse(null);
-    // if (existingSeat != null) {
-    // existingSeat.setBooked(false);
-    // existingSeat.setPassenger(null);
-    // businessSeatRepository.save(existingSeat);
-    // return "Business seat cancelled successfully";
-    // } else {
-    // return "Business seat not found";
-    // }
-    // }
-
     @Override
-    public void cancelFlightBooking(List<Seat> seats) {
-        seats.forEach(seat -> {
-            if (seat.isBooked()) {
-                seat.setBooked(false);
-                seat.setPassenger(null);
-                seatRepository.save(seat);
+    public void cancelFlightBooking(List<Booking> seats) {
+        seats.forEach(booking -> {
+            if (booking.getStatus().equals("BOOKED")) {
+                SeatKey seatKey = new SeatKey(booking.getFlightId(), booking.getSeatNumber());
+                Seat seatEntity = seatRepository.findById(seatKey).orElse(null);
+                if (seatEntity != null) {
+                    seatEntity.setBooked(false);
+                    seatRepository.save(seatEntity);
+                }
+                booking.setStatus("CANCELLED");
+                bookingRepository.save(booking);
             }
         });
 
     }
 
     @Override
-    public Boolean cancelSeat(String id, String seatNumber) {
-        try {
-            SeatKey seatKey = new SeatKey(Long.parseLong(id), seatNumber);
-            seatRepository.deleteById(seatKey);
-            return true;
-        } catch (Exception e) {
-            throw e;
+    public List<FlightDto> FlightByOriginAndDestination(String oCountry, String oState, String ocity, String dCountry,
+            String dState, String dCity) {
+        List<FlightDto> flightDto = flightRepository
+                .findByOrigincountryAndOriginstateAndOrigincityAndDestinationcountryAndDestinationstateAndDestinationcity(
+                        oCountry, oState, ocity, dCountry, dState, dCity);
+        if(flightDto.size()>0){
+            return flightDto;
         }
+        return null;
     }
 }

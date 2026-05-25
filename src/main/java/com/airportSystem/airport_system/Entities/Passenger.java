@@ -33,9 +33,10 @@ public class Passenger {
     private String imgcontenttype;
     @Lob
     private byte[] image;
+    
     @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("PassengerSeatsRef")
-    private List<Seat> seats = new java.util.ArrayList<>();
+    @JsonManagedReference("PassengerBookingRef")
+    private List<Booking> bookings = new java.util.ArrayList<>();
     // @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
     // @JsonManagedReference("businessSeatsPassengerRef")
     // private List<BusinessSeats> businessseats = new java.util.ArrayList<>();

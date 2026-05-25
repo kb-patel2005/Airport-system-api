@@ -1,9 +1,7 @@
 package com.airportSystem.airport_system.Service;
-import com.airportSystem.airport_system.Entities.BusinessSeats;
-import com.airportSystem.airport_system.Entities.EconomicSeats;
+import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
-import com.airportSystem.airport_system.Entities.Seat;
 
 import java.util.*;
 
@@ -17,10 +15,13 @@ public interface FlightService {
     String addFlight(Flights flight);
     String updateFlight(Flights flight);
     String deleteFlight(Long id);
-    // String cancelEconomicFlight(EconomicSeats seat);
-    // String cancelBusinessFlight(BusinessSeats seat);
     List<List<Boolean>> getSeatsByClass(Long id);
     Flights saveFlight(Flights flight);
-    void cancelFlightBooking(List<Seat> seats);
-    Boolean cancelSeat(String id, String seatNumber);
+    void cancelFlightBooking(List<Booking> seats);
+    public List<FlightDto> FlightByOriginAndDestination(String oCountry,
+            String oState,
+            String ocity,
+            String dCountry,
+            String dState,
+            String dCity);
 }

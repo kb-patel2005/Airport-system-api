@@ -17,13 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.airportSystem.airport_system.Entities.DisplaySeats;
+import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.LoginStaff;
 import com.airportSystem.airport_system.Entities.Passenger;
 import com.airportSystem.airport_system.Entities.Stafftextdata;
 import com.airportSystem.airport_system.Service.AirportService;
-import com.airportSystem.airport_system.Service.FlightService;
 
 @RestController
 @CrossOrigin("*")
@@ -32,9 +31,6 @@ public class controller {
 
     @Autowired
     private AirportService service;
-
-    @Autowired
-    private FlightService flightService;
 
     @GetMapping("/welcome/passenger/{id}")
     public Passenger welcome(@PathVariable("id") int id) {
@@ -83,38 +79,17 @@ public class controller {
         if (passenger == null) {
             return "Passenger already deleted or not found";
         }
-        if (passenger.getSeats() != null && !passenger.getSeats().isEmpty()) {
-            flightService.cancelFlightBooking(passenger.getSeats());
-        }
         return service.deletePassenger(id);
     }
 
-    @DeleteMapping("/cancelSeat/{id}/{seatNumber}")
-    public boolean cancelseat(@PathVariable("id") String id,@PathVariable("seatNumber") String seatNumber){
-        return flightService.cancelSeat(id,seatNumber);
-    }
-
     @GetMapping("/passengerSeats/{id}")
-    public List<DisplaySeats> getAllPassengerSeats(@PathVariable("id") String id){
+    public List<Booking> getAllPassengerSeats(@PathVariable("id") String id){
         return service.getAllSeatsOfPassenger(id);
     }
 
-    // @PostMapping("/cancelEBooking")
-    // public void cancelEconomicBooking(@RequestBody EconomicSeats seat) {
-    //     try {
-    //         flightService.cancelEconomicFlight(seat);
-    //     } catch (Exception e) {
-    //         throw e;
-    //     }
-    // }
-
-    // @PostMapping("/cancelBBooking")
-    // public void cancelBusinessBooking(@RequestBody BusinessSeats seat) {
-    //     try {
-    //         flightService.cancelBusinessFlight(seat);
-    //     } catch (Exception e) {
-    //         throw e;
-    //     }
-    // }
+    @PutMapping("/cancelBooking")
+    public void cancelBooking(@RequestBody List<Booking> seats) {
+        service.cancelFlightBooking(seats);
+    }
 
 }

@@ -31,8 +31,8 @@ public class Seat {
     @JsonBackReference("SeatsRef")
     private Flights flight;
 
-    @ManyToOne
-    @JoinColumn(name = "passenger_id")
-    @JsonBackReference("PassengerSeatsRef")
-    private Passenger passenger;
+    // @ManyToOne
+    // @JoinColumn(name = "passenger_id")
+    // @JsonBackReference("PassengerSeatsRef")
+    // private Passenger passenger;
 }

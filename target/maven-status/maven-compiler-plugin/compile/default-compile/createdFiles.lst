@@ -1,5 +1,4 @@
 com\airportSystem\airport_system\Service\StaffService.class
-com\airportSystem\airport_system\Entities\EconomicSeats.class
 com\airportSystem\airport_system\Entities\Seat.class
 com\airportSystem\airport_system\Dao\StaffRepository.class
 com\airportSystem\airport_system\Entities\SendSeat.class
@@ -10,15 +9,15 @@ com\airportSystem\airport_system\Controller\controller.class
 com\airportSystem\airport_system\Dao\PassengerRepository.class
 com\airportSystem\airport_system\Controller\FlightController.class
 com\airportSystem\airport_system\Dao\SeatRepository.class
-com\airportSystem\airport_system\Dao\BusinessSeatRepository.class
 com\airportSystem\airport_system\Entities\Passenger.class
 com\airportSystem\airport_system\Controller\Staffcontroller.class
 com\airportSystem\airport_system\Entities\Staff.class
 com\airportSystem\airport_system\Entities\SeatDto.class
 com\airportSystem\airport_system\ServiceProvider\StaffImplementation.class
 com\airportSystem\airport_system\AirportSystemApplication.class
-com\airportSystem\airport_system\Entities\BusinessSeats.class
+com\airportSystem\airport_system\Dao\BookingRepository.class
 com\airportSystem\airport_system\ServiceProvider\FlightSerImp.class
+com\airportSystem\airport_system\Entities\Booking.class
 com\airportSystem\airport_system\Entities\FlightDto.class
 com\airportSystem\airport_system\Config\JwtFilter.class
 com\airportSystem\airport_system\Controller\AuthRequest.class
@@ -26,7 +25,6 @@ com\airportSystem\airport_system\Dao\FlightRepository.class
 com\airportSystem\airport_system\Entities\DisplaySeats.class
 com\airportSystem\airport_system\Controller\AuthResponse.class
 com\airportSystem\airport_system\Entities\Stafftextdata.class
-com\airportSystem\airport_system\Dao\EconomicSeatRepository.class
 com\airportSystem\airport_system\Service\FlightService.class
 com\airportSystem\airport_system\Config\WebSocketConfig.class
 com\airportSystem\airport_system\Entities\SeatKey.class

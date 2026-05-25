@@ -1,5 +1,6 @@
 package com.airportSystem.airport_system.ServiceProvider;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import com.airportSystem.airport_system.Dao.BusinessSeatRepository;
-import com.airportSystem.airport_system.Dao.EconomicSeatRepository;
+import com.airportSystem.airport_system.Dao.BookingRepository;
 import com.airportSystem.airport_system.Dao.FlightRepository;
 import com.airportSystem.airport_system.Dao.PassengerRepository;
 import com.airportSystem.airport_system.Dao.SeatRepository;
-import com.airportSystem.airport_system.Entities.BusinessSeats;
+import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.DisplaySeats;
-import com.airportSystem.airport_system.Entities.EconomicSeats;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Flights;
 import com.airportSystem.airport_system.Entities.Passenger;
@@ -40,6 +39,9 @@ public class AirportServiceImplementation implements AirportService {
     private SeatRepository seatRepository;
 
     @Autowired
+    private BookingRepository bookingRepository;
+
+    @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
     @Override
@@ -62,7 +64,7 @@ public class AirportServiceImplementation implements AirportService {
     public void updatePassenger(Passenger passenger) {
         Passenger existingPassenger = repository.findById(passenger.getId()).orElse(null);
         if (existingPassenger != null) {
-            passenger.setSeats(existingPassenger.getSeats());
+            // passenger.setSeats(existingPassenger.getSeats());
             repository.save(passenger);
         } else {
             System.out.println("Passenger not found with ID: " + passenger.getId());
@@ -102,17 +104,20 @@ public class AirportServiceImplementation implements AirportService {
                     throw new RuntimeException("Seat " + seatDto.getSeatNumber() + " is already booked");
                 }
             } else {
-                // create new seat if not exists
-                seat = new Seat();
-                seat.setId(key);
-                seat.setFlight(flight);
+                throw new RuntimeException("Seat " + seatDto.getSeatNumber() + " not found");
             }
 
             seat.setBooked(true);
-            seat.setPassenger(passenger);
+            seatRepository.save(seat);
+            Booking booking = new Booking();
+            booking.setPassenger(passenger);
+            booking.setFlightId(flight.getId());
+            booking.setSeatNumber(seatDto.getSeatNumber());
+            booking.setStatus("BOOKED");
+            booking.setBookingDate(LocalDateTime.now());
+            booking.setPrice(getSeatPrice(seatDto.getSeatNumber(), flight.getPrice()));
 
-            passenger.getSeats().add(seat);
-            
+            bookingRepository.save(booking);
         }
 
         SendSeat update = new SendSeat(seats,true);
@@ -123,30 +128,46 @@ public class AirportServiceImplementation implements AirportService {
     }
 
     @Override
-    public List<DisplaySeats> getAllSeatsOfPassenger(String id) {
+    public List<Booking> getAllSeatsOfPassenger(String id) {
         Long pId = Long.parseLong(id);
         Optional<Passenger> passenger = repository.findById(pId);
-        List<DisplaySeats> seats = new ArrayList<>();
+        List<Booking> bookings = new ArrayList<>();
         if(passenger.isPresent()){
-            for (Seat seat : passenger.get().getSeats()) {
-                // Optional<Flights> flight = flightRepository.findById(seat.getId().getFlightId());
-                DisplaySeats dSeats = new DisplaySeats();
-                dSeats.setFlightId(seat.getId().getFlightId());
-                dSeats.setFrom(seat.getFlight().getOrigincountry()+" ,"+seat.getFlight().getOriginstate()+" ,"+seat.getFlight().getOrigincity());
-                dSeats.setTo(seat.getFlight().getDestinationcity()+" ,"+seat.getFlight().getDestinationstate()+" ,"+seat.getFlight().getDestinationcountry());
-                dSeats.setSeatNumber(seat.getId().getSeatNumber());
-                int price = seat.getFlight().getPrice();
-                int seatRow = Integer.parseInt(seat.getId().getSeatNumber().substring(1));
-                if(seatRow <= 6){
-                    dSeats.setPrice(price);
-                }else{
-                    dSeats.setPrice(Math.ceil(price * 1.5));
-                }
-                seats.add(dSeats);
-            }
-            return seats;
+            return passenger.get().getBookings();
         }
-        return null;
+        return bookings;
+    }
+
+    @Override
+    public void cancelFlightBooking(List<Booking> seats) {
+        seats.forEach(booking -> {
+            if (booking.getStatus().equals("BOOKED")) {
+                SeatKey seatKey = new SeatKey(booking.getFlightId(), booking.getSeatNumber());
+                Seat seatEntity = seatRepository.findById(seatKey).orElse(null);
+                if (seatEntity != null) {
+                    seatEntity.setBooked(false);
+                    seatRepository.save(seatEntity);
+                }
+                booking.setStatus("CANCELLED");
+                bookingRepository.save(booking);
+            }
+        });
+
+    }
+
+    //helper method to calculate seat price based on seat number and base price of flight
+    public double getSeatPrice(String seatNumber, int basePrice) {
+        
+        String rowPart = seatNumber.replaceAll("[^0-9]", "");
+        int row = Integer.parseInt(rowPart);
+
+        if (row <= 6) {
+            System.out.println("Seat " + seatNumber + " is Business Class");
+            return basePrice * 1.5; 
+        } else {
+            System.out.println("Seat " + seatNumber + " is Economy Class");
+            return basePrice; 
+        }
     }
 
 }

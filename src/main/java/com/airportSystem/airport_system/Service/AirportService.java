@@ -2,10 +2,9 @@ package com.airportSystem.airport_system.Service;
 
 import java.util.List;
 
-import com.airportSystem.airport_system.Entities.DisplaySeats;
+import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Passenger;
-import com.airportSystem.airport_system.Entities.Seat;
 
 public interface AirportService {
     
@@ -21,6 +20,8 @@ public interface AirportService {
 
     public void addFlightToPassenger(FlightAssign flightAssign);
 
-    public List<DisplaySeats> getAllSeatsOfPassenger(String id);
+    public List<Booking> getAllSeatsOfPassenger(String id);
+
+    public void cancelFlightBooking(List<Booking> seats);
 
 }

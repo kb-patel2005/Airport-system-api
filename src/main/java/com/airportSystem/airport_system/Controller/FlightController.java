@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.airportSystem.airport_system.Dao.SeatRepository;
@@ -57,7 +58,6 @@ public class FlightController {
                 seat.setId(seatKey);
                 seat.setFlight(savedFlight);
                 seat.setBooked(false);
-                seat.setPassenger(null);
                 seats.add(seat);
             }
         }
@@ -75,4 +75,15 @@ public class FlightController {
     public List<List<Boolean>> getSeatsByClass(@PathVariable("id") Long id) {
         return flightService.getSeatsByClass(id);
     }
+
+    @GetMapping("/flightUsingLocation")
+    public List<FlightDto> returnFlightByOriginAndDestination(@RequestParam("originCountry") String oCountry,
+            @RequestParam("originState") String oState,
+            @RequestParam("originCity") String ocity,
+            @RequestParam("destinationCountry") String dCountry,
+            @RequestParam("destinationState") String dState,
+            @RequestParam("destinationCity") String dCity) {
+        return flightService.FlightByOriginAndDestination(oCountry, oState, ocity, dCountry, dState, dCity);
+    }
+
 }
