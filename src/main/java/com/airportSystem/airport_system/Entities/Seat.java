@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 @Table(
     name = "seats",
     indexes = {
-        @Index(name = "idx_flight_id", columnList = "flight_id"),
-        @Index(name = "idx_passenger_id", columnList = "passenger_id")
+        @Index(name = "idx_flight_id", columnList = "flight_id")
     }
 )
 public class Seat {
