@@ -29,4 +29,5 @@ public class BookedSeat {
     @ManyToOne
     @JoinColumn(name = "booking_id")
     private Booking booking;
+
 }

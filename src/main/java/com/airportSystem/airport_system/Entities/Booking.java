@@ -30,8 +30,6 @@ public class Booking {
     @JoinColumn(name = "flight_id")
     private Flights flight;
 
-    private Double totalPrice;
-
     private LocalDateTime bookingDate;
 
     private String status;

@@ -125,14 +125,12 @@ public class AirportServiceImplementation implements AirportService {
             bookedSeat.setSeatNumber(seatNumber);
             bookedSeat.setStatus("BOOKED");
             bookedSeat.setBooking(booking);
+            bookedSeat.setSeatPrice(getSeatPrice(List.of(seatNumber), flight.getPrice()));
 
             bookedSeats.add(bookedSeat);
             selectedSeats.add(seatNumber);
         }
 
-        double totalPrice = getSeatPrice(selectedSeats, flight.getPrice());
-
-        booking.setTotalPrice(totalPrice);
         booking.setBookedSeats(bookedSeats);
 
         bookingRepository.save(booking);
