@@ -147,37 +147,62 @@ public class AirportServiceImplementation implements AirportService {
 
     @Override
     public List<BookingDto> getAllSeatsOfPassenger(String id) {
-        Long pId = Long.parseLong(id);
-        Optional<Passenger> passenger = repository.findById(pId);
+
+        Long passengerId = Long.parseLong(id);
+
+        Passenger passenger = repository.findById(passengerId)
+                .orElseThrow(() -> new RuntimeException("Passenger not found"));
+
         List<BookingDto> bookingDtos = new ArrayList<>();
-        if (passenger.isPresent()) {
-            passenger.get().getBookings().forEach(booking -> {
-                FlightDto flightDto = new FlightDto();
-                Flights flight = booking.getFlight();
-                flightDto.setId(flight.getId());
-                flightDto.setOrigincountry(flight.getOrigincountry());
-                flightDto.setOriginstate(flight.getOriginstate());
-                flightDto.setOrigincity(flight.getOrigincity());
-                flightDto.setDestinationcountry(flight.getDestinationcountry());
-                flightDto.setDestinationstate(flight.getDestinationstate());
-                flightDto.setDestinationcity(flight.getDestinationcity());
-                flightDto.setAirline(flight.getAirline());
-                flightDto.setPrice(flight.getPrice());
-                booking.getBookedSeats().forEach(bookedSeat -> {
-                    BookedSeatDto bookedSeatDto = new BookedSeatDto();
-                    bookedSeatDto.setId(bookedSeat.getId());
-                    bookedSeatDto.setSeatNumber(bookedSeat.getSeatNumber());
-                    bookedSeatDto.setSeatPrice(bookedSeat.getSeatPrice());
-                    bookedSeatDto.setStatus(bookedSeat.getStatus());
-                });
-                BookingDto bookingDto = new BookingDto();
-                bookingDto.setBookingId(booking.getBookingId());
-                bookingDto.setFlight(flightDto);
-                bookingDto.setBookingDate(booking.getBookingDate());
-                bookingDto.setStatus(booking.getStatus());
-                bookingDtos.add(bookingDto);
-            });
+
+        for (Booking booking : passenger.getBookings()) {
+
+            Flights flight = booking.getFlight();
+
+            // Flight DTO
+            FlightDto flightDto = new FlightDto();
+
+            flightDto.setId(flight.getId());
+            flightDto.setAirline(flight.getAirline());
+
+            flightDto.setOrigincountry(flight.getOrigincountry());
+            flightDto.setOriginstate(flight.getOriginstate());
+            flightDto.setOrigincity(flight.getOrigincity());
+
+            flightDto.setDestinationcountry(flight.getDestinationcountry());
+            flightDto.setDestinationstate(flight.getDestinationstate());
+            flightDto.setDestinationcity(flight.getDestinationcity());
+
+            flightDto.setPrice(flight.getPrice());
+
+            // Booking DTO
+            BookingDto bookingDto = new BookingDto();
+
+            bookingDto.setBookingId(booking.getBookingId());
+            bookingDto.setFlight(flightDto);
+            bookingDto.setBookingDate(booking.getBookingDate());
+            bookingDto.setStatus(booking.getStatus());
+
+            // Booked Seats
+            List<BookedSeatDto> seatDtos = new ArrayList<>();
+
+            for (BookedSeat bookedSeat : booking.getBookedSeats()) {
+
+                BookedSeatDto dto = new BookedSeatDto();
+
+                dto.setId(bookedSeat.getId());
+                dto.setSeatNumber(bookedSeat.getSeatNumber());
+                dto.setSeatPrice(bookedSeat.getSeatPrice());
+                dto.setStatus(bookedSeat.getStatus());
+
+                seatDtos.add(dto);
+            }
+
+            bookingDto.setBookedSeats(seatDtos);
+
+            bookingDtos.add(bookingDto);
         }
+
         return bookingDtos;
     }
 
