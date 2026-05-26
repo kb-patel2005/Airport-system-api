@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.airportSystem.airport_system.Dao.BookedSeatRepository;
 import com.airportSystem.airport_system.Entities.BookedSeat;
 import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.BookingDto;
@@ -33,6 +34,9 @@ public class controller {
 
     @Autowired
     private AirportService service;
+
+    @Autowired
+    private BookedSeatRepository bookedSeatRepository;
 
     @GetMapping("/welcome/passenger/{id}")
     public Passenger welcome(@PathVariable("id") int id) {
@@ -90,12 +94,17 @@ public class controller {
     }
 
     @PutMapping("/cancelBooking")
-    public void cancelBooking(@RequestBody List<Booking> seats) {
-        service.cancelFlightBooking(seats);
+    public void cancelBooking(@RequestBody List<String> bookingIds) {
+        service.cancelFlightBooking(bookingIds);
     }
 
-    @PutMapping("/cancelBookedSeat")
-    public BookedSeat cancelBookedSeat(@RequestBody BookedSeat bookedSeat) {
+    @PutMapping("/cancelBookedSeat/{id}")
+    public BookedSeat cancelBookedSeat(@PathVariable("id") String bookedSeatId) {
+        // Assuming you have a method to find booked seat by ID
+        BookedSeat bookedSeat = bookedSeatRepository.findById(Long.parseLong(bookedSeatId)).orElse(null);
+        if (bookedSeat == null) {
+            throw new IllegalArgumentException("Booked seat not found with ID: " + bookedSeatId);
+        }
         return service.cancelBookedSeatById(bookedSeat);
     }
 

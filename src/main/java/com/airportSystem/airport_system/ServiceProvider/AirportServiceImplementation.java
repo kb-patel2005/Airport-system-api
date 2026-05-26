@@ -159,47 +159,33 @@ public class AirportServiceImplementation implements AirportService {
 
             Flights flight = booking.getFlight();
 
-            // Flight DTO
             FlightDto flightDto = new FlightDto();
-
             flightDto.setId(flight.getId());
             flightDto.setAirline(flight.getAirline());
-
             flightDto.setOrigincountry(flight.getOrigincountry());
             flightDto.setOriginstate(flight.getOriginstate());
             flightDto.setOrigincity(flight.getOrigincity());
-
             flightDto.setDestinationcountry(flight.getDestinationcountry());
             flightDto.setDestinationstate(flight.getDestinationstate());
             flightDto.setDestinationcity(flight.getDestinationcity());
-
             flightDto.setPrice(flight.getPrice());
 
-            // Booking DTO
             BookingDto bookingDto = new BookingDto();
-
             bookingDto.setBookingId(booking.getBookingId());
             bookingDto.setFlight(flightDto);
             bookingDto.setBookingDate(booking.getBookingDate());
             bookingDto.setStatus(booking.getStatus());
-
-            // Booked Seats
             List<BookedSeatDto> seatDtos = new ArrayList<>();
 
             for (BookedSeat bookedSeat : booking.getBookedSeats()) {
-
                 BookedSeatDto dto = new BookedSeatDto();
-
                 dto.setId(bookedSeat.getId());
                 dto.setSeatNumber(bookedSeat.getSeatNumber());
                 dto.setSeatPrice(bookedSeat.getSeatPrice());
                 dto.setStatus(bookedSeat.getStatus());
-
                 seatDtos.add(dto);
             }
-
             bookingDto.setBookedSeats(seatDtos);
-
             bookingDtos.add(bookingDto);
         }
 
@@ -207,9 +193,10 @@ public class AirportServiceImplementation implements AirportService {
     }
 
     @Override
-    public void cancelFlightBooking(List<Booking> seats) {
-        seats.forEach(booking -> {
-            if (booking.getStatus().equals("BOOKED")) {
+    public void cancelFlightBooking(List<String> bookingIds) {
+        bookingIds.forEach(id -> {
+            Booking booking = bookingRepository.findById(Long.parseLong(id)).orElse(null);
+            if (booking != null && booking.getStatus().equals("BOOKED")) {
                 booking.setStatus("CANCELLED");
                 booking.getBookedSeats().forEach(bookedSeat -> {
                     SeatKey seatKey = new SeatKey(booking.getFlight().getId(), bookedSeat.getSeatNumber());

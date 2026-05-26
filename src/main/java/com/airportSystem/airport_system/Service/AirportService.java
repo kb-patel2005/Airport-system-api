@@ -24,7 +24,7 @@ public interface AirportService {
 
     public List<BookingDto> getAllSeatsOfPassenger(String id);
 
-    public void cancelFlightBooking(List<Booking> seats);
+    public void cancelFlightBooking(List<String> bookingIds);
 
     public BookedSeat cancelBookedSeatById(BookedSeat bookedSeat);
 
