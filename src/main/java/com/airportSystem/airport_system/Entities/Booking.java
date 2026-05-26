@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Getter
@@ -40,5 +41,6 @@ public class Booking {
     private Passenger passenger;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    @JsonManagedReference("booking-seat")
     private List<BookedSeat> bookedSeats = new ArrayList<>();
 }

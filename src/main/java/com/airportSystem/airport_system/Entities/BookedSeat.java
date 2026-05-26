@@ -1,5 +1,7 @@
 package com.airportSystem.airport_system.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,6 +30,7 @@ public class BookedSeat {
 
     @ManyToOne
     @JoinColumn(name = "booking_id")
+    @JsonBackReference("booking-seat")
     private Booking booking;
 
 }

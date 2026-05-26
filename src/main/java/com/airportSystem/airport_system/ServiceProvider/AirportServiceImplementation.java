@@ -15,9 +15,12 @@ import com.airportSystem.airport_system.Dao.FlightRepository;
 import com.airportSystem.airport_system.Dao.PassengerRepository;
 import com.airportSystem.airport_system.Dao.SeatRepository;
 import com.airportSystem.airport_system.Entities.BookedSeat;
+import com.airportSystem.airport_system.Entities.BookedSeatDto;
 import com.airportSystem.airport_system.Entities.Booking;
+import com.airportSystem.airport_system.Entities.BookingDto;
 import com.airportSystem.airport_system.Entities.DisplaySeats;
 import com.airportSystem.airport_system.Entities.FlightAssign;
+import com.airportSystem.airport_system.Entities.FlightDto;
 import com.airportSystem.airport_system.Entities.Flights;
 import com.airportSystem.airport_system.Entities.Passenger;
 import com.airportSystem.airport_system.Entities.Seat;
@@ -143,14 +146,39 @@ public class AirportServiceImplementation implements AirportService {
     }
 
     @Override
-    public List<Booking> getAllSeatsOfPassenger(String id) {
+    public List<BookingDto> getAllSeatsOfPassenger(String id) {
         Long pId = Long.parseLong(id);
         Optional<Passenger> passenger = repository.findById(pId);
-        List<Booking> bookings = new ArrayList<>();
+        List<BookingDto> bookingDtos = new ArrayList<>();
         if (passenger.isPresent()) {
-            return passenger.get().getBookings();
+            passenger.get().getBookings().forEach(booking -> {
+                FlightDto flightDto = new FlightDto();
+                Flights flight = booking.getFlight();
+                flightDto.setId(flight.getId());
+                flightDto.setOrigincountry(flight.getOrigincountry());
+                flightDto.setOriginstate(flight.getOriginstate());
+                flightDto.setOrigincity(flight.getOrigincity());
+                flightDto.setDestinationcountry(flight.getDestinationcountry());
+                flightDto.setDestinationstate(flight.getDestinationstate());
+                flightDto.setDestinationcity(flight.getDestinationcity());
+                flightDto.setAirline(flight.getAirline());
+                flightDto.setPrice(flight.getPrice());
+                booking.getBookedSeats().forEach(bookedSeat -> {
+                    BookedSeatDto bookedSeatDto = new BookedSeatDto();
+                    bookedSeatDto.setId(bookedSeat.getId());
+                    bookedSeatDto.setSeatNumber(bookedSeat.getSeatNumber());
+                    bookedSeatDto.setSeatPrice(bookedSeat.getSeatPrice());
+                    bookedSeatDto.setStatus(bookedSeat.getStatus());
+                });
+                BookingDto bookingDto = new BookingDto();
+                bookingDto.setBookingId(booking.getBookingId());
+                bookingDto.setFlight(flightDto);
+                bookingDto.setBookingDate(booking.getBookingDate());
+                bookingDto.setStatus(booking.getStatus());
+                bookingDtos.add(bookingDto);
+            });
         }
-        return bookings;
+        return bookingDtos;
     }
 
     @Override

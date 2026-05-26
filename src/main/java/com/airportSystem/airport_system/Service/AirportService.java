@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.airportSystem.airport_system.Entities.BookedSeat;
 import com.airportSystem.airport_system.Entities.Booking;
+import com.airportSystem.airport_system.Entities.BookingDto;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Passenger;
 
@@ -21,7 +22,7 @@ public interface AirportService {
 
     public void addFlightToPassenger(FlightAssign flightAssign);
 
-    public List<Booking> getAllSeatsOfPassenger(String id);
+    public List<BookingDto> getAllSeatsOfPassenger(String id);
 
     public void cancelFlightBooking(List<Booking> seats);
 

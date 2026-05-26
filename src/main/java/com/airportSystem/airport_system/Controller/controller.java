@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.airportSystem.airport_system.Entities.BookedSeat;
 import com.airportSystem.airport_system.Entities.Booking;
+import com.airportSystem.airport_system.Entities.BookingDto;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.LoginStaff;
 import com.airportSystem.airport_system.Entities.Passenger;
@@ -84,7 +85,7 @@ public class controller {
     }
 
     @GetMapping("/passengerSeats/{id}")
-    public List<Booking> getAllPassengerSeats(@PathVariable("id") String id){
+    public List<BookingDto> getAllPassengerSeats(@PathVariable("id") String id){
         return service.getAllSeatsOfPassenger(id);
     }
 

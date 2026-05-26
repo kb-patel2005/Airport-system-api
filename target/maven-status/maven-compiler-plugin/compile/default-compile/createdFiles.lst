@@ -9,6 +9,7 @@ com\airportSystem\airport_system\Controller\controller.class
 com\airportSystem\airport_system\Dao\PassengerRepository.class
 com\airportSystem\airport_system\Controller\FlightController.class
 com\airportSystem\airport_system\Dao\SeatRepository.class
+com\airportSystem\airport_system\Entities\BookingDto.class
 com\airportSystem\airport_system\Entities\Passenger.class
 com\airportSystem\airport_system\Controller\Staffcontroller.class
 com\airportSystem\airport_system\Entities\Staff.class
@@ -31,5 +32,6 @@ com\airportSystem\airport_system\Config\WebSocketConfig.class
 com\airportSystem\airport_system\Dao\BookedSeatRepository.class
 com\airportSystem\airport_system\Entities\SeatKey.class
 com\airportSystem\airport_system\Controller\AuthController.class
+com\airportSystem\airport_system\Entities\BookedSeatDto.class
 com\airportSystem\airport_system\Entities\FlightAssign.class
 com\airportSystem\airport_system\ServiceProvider\AirportServiceImplementation.class
