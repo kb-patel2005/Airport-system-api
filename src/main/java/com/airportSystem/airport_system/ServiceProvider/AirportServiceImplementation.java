@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.airportSystem.airport_system.Dao.BookedSeatRepository;
 import com.airportSystem.airport_system.Dao.BookingRepository;
 import com.airportSystem.airport_system.Dao.FlightRepository;
 import com.airportSystem.airport_system.Dao.PassengerRepository;
 import com.airportSystem.airport_system.Dao.SeatRepository;
+import com.airportSystem.airport_system.Entities.BookedSeat;
 import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.DisplaySeats;
 import com.airportSystem.airport_system.Entities.FlightAssign;
@@ -42,6 +44,9 @@ public class AirportServiceImplementation implements AirportService {
     private BookingRepository bookingRepository;
 
     @Autowired
+    private BookedSeatRepository bookedSeatRepository;
+
+    @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
     @Override
@@ -64,7 +69,6 @@ public class AirportServiceImplementation implements AirportService {
     public void updatePassenger(Passenger passenger) {
         Passenger existingPassenger = repository.findById(passenger.getId()).orElse(null);
         if (existingPassenger != null) {
-            // passenger.setSeats(existingPassenger.getSeats());
             repository.save(passenger);
         } else {
             System.out.println("Passenger not found with ID: " + passenger.getId());
@@ -85,46 +89,59 @@ public class AirportServiceImplementation implements AirportService {
     @Override
     @Transactional
     public void addFlightToPassenger(FlightAssign flightAssign) {
+
         Passenger passenger = repository.findById(flightAssign.getPassengerId())
                 .orElseThrow(() -> new RuntimeException("Passenger not found"));
 
         Flights flight = flightRepository.findById(flightAssign.getFlight().getId())
                 .orElseThrow(() -> new RuntimeException("Flight not found"));
 
-        List<String> seats = new ArrayList<>();
+        Booking booking = new Booking();
+        booking.setPassenger(passenger);
+        booking.setFlight(flight);
+        booking.setStatus("BOOKED");
+        booking.setBookingDate(LocalDateTime.now());
+
+        List<BookedSeat> bookedSeats = new ArrayList<>();
+        List<String> selectedSeats = new ArrayList<>();
 
         for (SeatDto seatDto : flightAssign.getSeats()) {
-            SeatKey key = new SeatKey(flight.getId(), seatDto.getSeatNumber());
-            seats.add(seatDto.getSeatNumber());
 
-            Seat seat = seatRepository.findById(key).orElse(null);
+            String seatNumber = seatDto.getSeatNumber();
 
-            if (seat != null) {
-                if (seat.isBooked()) {
-                    throw new RuntimeException("Seat " + seatDto.getSeatNumber() + " is already booked");
-                }
-            } else {
-                throw new RuntimeException("Seat " + seatDto.getSeatNumber() + " not found");
+            SeatKey seatKey = new SeatKey(flight.getId(), seatNumber);
+
+            Seat seat = seatRepository.findById(seatKey)
+                    .orElseThrow(() -> new RuntimeException("Seat " + seatNumber + " not found"));
+
+            if (seat.isBooked()) {
+                throw new RuntimeException("Seat " + seatNumber + " already booked");
             }
 
             seat.setBooked(true);
             seatRepository.save(seat);
-            Booking booking = new Booking();
-            booking.setPassenger(passenger);
-            booking.setFlightId(flight.getId());
-            booking.setSeatNumber(seatDto.getSeatNumber());
-            booking.setStatus("BOOKED");
-            booking.setBookingDate(LocalDateTime.now());
-            booking.setPrice(getSeatPrice(seatDto.getSeatNumber(), flight.getPrice()));
 
-            bookingRepository.save(booking);
+            BookedSeat bookedSeat = new BookedSeat();
+            bookedSeat.setSeatNumber(seatNumber);
+            bookedSeat.setStatus("BOOKED");
+            bookedSeat.setBooking(booking);
+
+            bookedSeats.add(bookedSeat);
+            selectedSeats.add(seatNumber);
         }
 
-        SendSeat update = new SendSeat(seats,true);
+        double totalPrice = getSeatPrice(selectedSeats, flight.getPrice());
 
-        messagingTemplate.convertAndSend("/topic/messages/" + flightAssign.getFlight().getId(), update);
+        booking.setTotalPrice(totalPrice);
+        booking.setBookedSeats(bookedSeats);
 
-        repository.save(passenger); 
+        bookingRepository.save(booking);
+
+        SendSeat update = new SendSeat(selectedSeats, true);
+
+        messagingTemplate.convertAndSend(
+                "/topic/messages/" + flight.getId(),
+                update);
     }
 
     @Override
@@ -132,7 +149,7 @@ public class AirportServiceImplementation implements AirportService {
         Long pId = Long.parseLong(id);
         Optional<Passenger> passenger = repository.findById(pId);
         List<Booking> bookings = new ArrayList<>();
-        if(passenger.isPresent()){
+        if (passenger.isPresent()) {
             return passenger.get().getBookings();
         }
         return bookings;
@@ -142,31 +159,51 @@ public class AirportServiceImplementation implements AirportService {
     public void cancelFlightBooking(List<Booking> seats) {
         seats.forEach(booking -> {
             if (booking.getStatus().equals("BOOKED")) {
-                SeatKey seatKey = new SeatKey(booking.getFlightId(), booking.getSeatNumber());
-                Seat seatEntity = seatRepository.findById(seatKey).orElse(null);
-                if (seatEntity != null) {
-                    seatEntity.setBooked(false);
-                    seatRepository.save(seatEntity);
-                }
                 booking.setStatus("CANCELLED");
+                booking.getBookedSeats().forEach(bookedSeat -> {
+                    SeatKey seatKey = new SeatKey(booking.getFlight().getId(), bookedSeat.getSeatNumber());
+                    Seat seatEntity = seatRepository.findById(seatKey).orElse(null);
+                    if (seatEntity != null) {
+                        seatEntity.setBooked(false);
+                        seatRepository.save(seatEntity);
+                    }
+                    bookedSeat.setStatus("CANCELLED");
+                    bookedSeatRepository.save(bookedSeat);
+                });
                 bookingRepository.save(booking);
             }
         });
-
     }
 
-    //helper method to calculate seat price based on seat number and base price of flight
-    public double getSeatPrice(String seatNumber, int basePrice) {
-        
-        String rowPart = seatNumber.replaceAll("[^0-9]", "");
-        int row = Integer.parseInt(rowPart);
+    // price calculate karava mate function
+    public double getSeatPrice(List<String> seatNumbers, int basePrice) {
+        double totalPrice = 0.0;
+        for (String seat : seatNumbers) {
+            String rowPart = seat.replaceAll("[^0-9]", "");
+            int row = Integer.parseInt(rowPart);
+            if (row <= 6) {
+                totalPrice += basePrice * 1.5;
 
-        if (row <= 6) {
-            System.out.println("Seat " + seatNumber + " is Business Class");
-            return basePrice * 1.5; 
+            } else {
+                totalPrice += basePrice;
+            }
+        }
+        return totalPrice;
+    }
+
+    @Override
+    public BookedSeat cancelBookedSeatById(BookedSeat bookedSeat) {
+        if (bookedSeat.getStatus().equals("BOOKED")) {
+            bookedSeat.setStatus("CANCELLED");
+            SeatKey seatKey = new SeatKey(bookedSeat.getBooking().getFlight().getId(), bookedSeat.getSeatNumber());
+            Seat seatEntity = seatRepository.findById(seatKey).orElse(null);
+            if (seatEntity != null) {
+                seatEntity.setBooked(false);
+                seatRepository.save(seatEntity);
+            }
+            return bookedSeatRepository.save(bookedSeat);
         } else {
-            System.out.println("Seat " + seatNumber + " is Economy Class");
-            return basePrice; 
+            throw new RuntimeException("Booked seat is not in BOOKED status");
         }
     }
 

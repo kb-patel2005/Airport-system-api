@@ -2,6 +2,7 @@ package com.airportSystem.airport_system.Service;
 
 import java.util.List;
 
+import com.airportSystem.airport_system.Entities.BookedSeat;
 import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Passenger;
@@ -23,5 +24,7 @@ public interface AirportService {
     public List<Booking> getAllSeatsOfPassenger(String id);
 
     public void cancelFlightBooking(List<Booking> seats);
+
+    public BookedSeat cancelBookedSeatById(BookedSeat bookedSeat);
 
 }

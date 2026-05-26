@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.airportSystem.airport_system.Entities.BookedSeat;
 import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.LoginStaff;
@@ -90,6 +91,11 @@ public class controller {
     @PutMapping("/cancelBooking")
     public void cancelBooking(@RequestBody List<Booking> seats) {
         service.cancelFlightBooking(seats);
+    }
+
+    @PutMapping("/cancelBookedSeat")
+    public BookedSeat cancelBookedSeat(@RequestBody BookedSeat bookedSeat) {
+        return service.cancelBookedSeatById(bookedSeat);
     }
 
 }

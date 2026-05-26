@@ -99,17 +99,18 @@ public class FlightSerImp implements FlightService {
     public void cancelFlightBooking(List<Booking> seats) {
         seats.forEach(booking -> {
             if (booking.getStatus().equals("BOOKED")) {
-                SeatKey seatKey = new SeatKey(booking.getFlightId(), booking.getSeatNumber());
-                Seat seatEntity = seatRepository.findById(seatKey).orElse(null);
-                if (seatEntity != null) {
-                    seatEntity.setBooked(false);
-                    seatRepository.save(seatEntity);
-                }
                 booking.setStatus("CANCELLED");
+                booking.getBookedSeats().forEach(bookedSeat -> {
+                    SeatKey seatKey = new SeatKey(booking.getFlight().getId(), bookedSeat.getSeatNumber());
+                    Seat seatEntity = seatRepository.findById(seatKey).orElse(null);
+                    if (seatEntity != null) {
+                        seatEntity.setBooked(false);
+                        seatRepository.save(seatEntity);
+                    }
+                });
                 bookingRepository.save(booking);
             }
         });
-
     }
 
     @Override
@@ -118,7 +119,7 @@ public class FlightSerImp implements FlightService {
         List<FlightDto> flightDto = flightRepository
                 .findByOrigincountryAndOriginstateAndOrigincityAndDestinationcountryAndDestinationstateAndDestinationcity(
                         oCountry, oState, ocity, dCountry, dState, dCity);
-        if(flightDto.size()>0){
+        if (flightDto.size() > 0) {
             return flightDto;
         }
         return null;
