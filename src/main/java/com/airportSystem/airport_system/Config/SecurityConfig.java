@@ -31,6 +31,7 @@ public class SecurityConfig {
                             config.setAllowedOrigins(java.util.List.of("https://airportsystem.netlify.app"));
                             config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                             config.setAllowedHeaders(java.util.List.of("*"));
+                            config.setAllowCredentials(true);
                             return config;
                         });
                     } catch (Exception e) {

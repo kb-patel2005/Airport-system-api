@@ -1,5 +1,7 @@
 package com.airportSystem.airport_system.Config;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,9 +24,8 @@ public class JwtFilter extends org.springframework.web.filter.OncePerRequestFilt
     private PassengerDetailService PassengerDetailService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain filterChain) throws IOException,ServletException, java.io.IOException {
+    protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain filterChain) throws IOException,ServletException {
 
-        // IMPORTANT FOR CORS
         if (request.getMethod().equals("OPTIONS")) {
             filterChain.doFilter(request,response);
             return;
