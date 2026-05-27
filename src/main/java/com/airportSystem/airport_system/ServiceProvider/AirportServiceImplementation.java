@@ -52,6 +52,9 @@ public class AirportServiceImplementation implements AirportService {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     @Override
     public Passenger getPassengerData(String email) {
         return repository.findByEmail(email).orElse(null);
@@ -89,7 +92,11 @@ public class AirportServiceImplementation implements AirportService {
 
     @Override
     public Passenger findByEmailAndPassword(String email, String password) {
-        return repository.findByEmailAndPassword(email, password);
+        Passenger passenger = repository.findByEmail(email).orElse(null);
+        if (passenger != null && passwordEncoder.matches(password, passenger.getPassword())) {
+            return passenger;
+        }
+        return null;
     }
 
     @Override

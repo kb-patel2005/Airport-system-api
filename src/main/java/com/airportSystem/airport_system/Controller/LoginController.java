@@ -28,6 +28,9 @@ public class LoginController {
     private StaffService staffService;
 
     @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder PasswordEncoder;
+
+    @Autowired
     private com.airportSystem.airport_system.Config.jwtUtils jwtUtils;
 
     @Autowired
@@ -48,10 +51,15 @@ public class LoginController {
     }
 
     @PostMapping(value = "/staffRegister", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public HashMap<String, Object> staffRegister(@ModelAttribute Stafftextdata staffdata, @RequestParam("image") MultipartFile image) {
+    public HashMap<String, Object> staffRegister(@ModelAttribute Stafftextdata staffdata,
+            @RequestParam("image") MultipartFile image) {
         Staff staff = new Staff();
         staff.setUsername(staffdata.getUsername());
-        staff.setPassword(staffdata.getPassword());
+        String encodedPassword =
+                PasswordEncoder.encode(
+                        staffdata.getPassword());
+        staff.setPassword(
+                encodedPassword);
         staff.setGender(staffdata.getGender());
         staff.setRole(staffdata.getRole());
         staff.setEmail(staffdata.getEmail());
@@ -86,10 +94,11 @@ public class LoginController {
     }
 
     @PostMapping(value = "/addPassenger", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public HashMap<String, Object> addPassenger(@ModelAttribute Stafftextdata pass, @RequestParam("image") MultipartFile image) {
+    public HashMap<String, Object> addPassenger(@ModelAttribute Stafftextdata pass,
+            @RequestParam("image") MultipartFile image) {
         Passenger passenger = new Passenger();
         passenger.setUsername(pass.getUsername());
-        passenger.setPassword(pass.getPassword());
+        passenger.setPassword(PasswordEncoder.encode(pass.getPassword()));
         passenger.setGender(pass.getGender());
         passenger.setEmail(pass.getEmail());
         passenger.setPhone(Long.parseLong(pass.getPhone()));

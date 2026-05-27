@@ -15,5 +15,7 @@ public interface StaffRepository extends JpaRepository<Staff, Integer> {
     public String changingPassword(String email,String oldPassword, String newPassword);
 
     public Staff findByUsername(String username);
+
+    public Staff findByEmail(String email);
     
 }

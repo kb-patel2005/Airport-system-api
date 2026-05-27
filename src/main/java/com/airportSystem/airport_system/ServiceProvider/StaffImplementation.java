@@ -8,36 +8,48 @@ import com.airportSystem.airport_system.Entities.Staff;
 import com.airportSystem.airport_system.Service.StaffService;
 
 @Service
-public class StaffImplementation implements StaffService{
+public class StaffImplementation implements StaffService {
 
     @Autowired
     StaffRepository staffRepository;
 
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
     @Override
     public Staff staffLogin(String email, String password) {
-        return staffRepository.findByEmailAndPassword(email, password);
+        Staff staff = staffRepository.findByEmail(email);
+
+        if (staff != null &&
+
+                passwordEncoder.matches(
+                        password,
+                        staff.getPassword())) {
+
+            return staff;
+        }
+
+        return null;
     }
 
     @Override
     public String PasswordMethod(String email, String oldPassword, String newPassword) {
-
-        Staff existingStaff = staffRepository.findByEmailAndPassword(email, newPassword);
-        if(existingStaff == null){
+        Staff existingStaff =  staffRepository.findByEmail(email);
+        if (existingStaff == null) {
             return "Staff not found";
         }
-        if (oldPassword != existingStaff.getPassword()) {
+        if (!passwordEncoder.matches(oldPassword, existingStaff.getPassword())) {
             return "Old password is incorrect";
         } else {
             staffRepository.changingPassword(email, oldPassword, newPassword);
             return null;
         }
 
-        
     }
 
     @Override
     public String staffLogout(Staff staff) {
-        if(staff == null){
+        if (staff == null) {
             return "Staff not found";
         }
         staffRepository.delete(staff);
