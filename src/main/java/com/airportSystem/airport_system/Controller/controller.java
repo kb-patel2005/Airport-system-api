@@ -3,28 +3,21 @@ package com.airportSystem.airport_system.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.airportSystem.airport_system.Dao.BookedSeatRepository;
 import com.airportSystem.airport_system.Entities.BookedSeat;
-import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.BookingDto;
 import com.airportSystem.airport_system.Entities.FlightAssign;
-import com.airportSystem.airport_system.Entities.LoginStaff;
 import com.airportSystem.airport_system.Entities.Passenger;
-import com.airportSystem.airport_system.Entities.Stafftextdata;
 import com.airportSystem.airport_system.Service.AirportService;
 
 @RestController
@@ -38,36 +31,10 @@ public class controller {
     @Autowired
     private BookedSeatRepository bookedSeatRepository;
 
-    @GetMapping("/welcome/passenger/{id}")
-    public Passenger welcome(@PathVariable("id") int id) {
-        return service.getPassengerData(id);
-    }
-
-    @PostMapping("/passengerLogin")
-    public Passenger getPassengerData(@RequestBody LoginStaff loginStaff) {
-        Passenger p = service.findByEmailAndPassword(loginStaff.getUsername(), loginStaff.getPassword());
-        if (p == null) {
-            return null;
-        }
-        return p;
-    }
-
-    @PostMapping(value = "/addPassenger", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String addPassenger(@ModelAttribute Stafftextdata pass, @RequestParam("image") MultipartFile image) {
-        Passenger passenger = new Passenger();
-        passenger.setUsername(pass.getUsername());
-        passenger.setPassword(pass.getPassword());
-        passenger.setGender(pass.getGender());
-        passenger.setEmail(pass.getEmail());
-        passenger.setPhone(Long.parseLong(pass.getPhone()));
-        passenger.setImgname(image.getOriginalFilename());
-        passenger.setImgcontenttype(image.getContentType());
-        try {
-            passenger.setImage(image.getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return service.addPassenger(passenger);
+    @GetMapping("/welcome/passenger")
+    public Passenger welcome() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return service.getPassengerData(email);
     }
 
     @PutMapping("/bookFlight")
@@ -79,18 +46,24 @@ public class controller {
         }
     }
 
-    @DeleteMapping("/deletePassenger/{id}")
-    public String deletePassenger(@PathVariable("id") int id) {
-        Passenger passenger = service.getPassengerData(id);
+    @DeleteMapping("/deletePassenger")
+    public String deletePassenger() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Passenger passenger = service.getPassengerData(email);
         if (passenger == null) {
             return "Passenger already deleted or not found";
         }
-        return service.deletePassenger(id);
+        return service.deletePassenger(email);
     }
 
-    @GetMapping("/passengerSeats/{id}")
-    public List<BookingDto> getAllPassengerSeats(@PathVariable("id") String id){
-        return service.getAllSeatsOfPassenger(id);
+    @GetMapping("/passengerSeats")
+    public List<BookingDto> getAllPassengerSeats() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Passenger passenger = service.getPassengerData(email);
+        if (passenger == null) {
+            throw new IllegalArgumentException("Passenger not found with email: " + email);
+        }
+        return service.getAllSeatsOfPassenger(String.valueOf(passenger.getId()));
     }
 
     @PutMapping("/cancelBooking")
@@ -100,7 +73,7 @@ public class controller {
 
     @PutMapping("/cancelBookedSeat/{id}")
     public BookedSeat cancelBookedSeat(@PathVariable("id") String bookedSeatId) {
-        // Assuming you have a method to find booked seat by ID
+        
         BookedSeat bookedSeat = bookedSeatRepository.findById(Long.parseLong(bookedSeatId)).orElse(null);
         if (bookedSeat == null) {
             throw new IllegalArgumentException("Booked seat not found with ID: " + bookedSeatId);

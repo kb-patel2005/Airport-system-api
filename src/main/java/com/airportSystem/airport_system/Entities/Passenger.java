@@ -28,6 +28,7 @@ public class Passenger {
     private String gender;
     private int age;
     private long phone;
+    @jakarta.persistence.Column(unique = true)
     private String email;
     private String imgname;
     private String imgcontenttype;

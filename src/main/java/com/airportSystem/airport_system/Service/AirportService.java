@@ -3,20 +3,19 @@ package com.airportSystem.airport_system.Service;
 import java.util.List;
 
 import com.airportSystem.airport_system.Entities.BookedSeat;
-import com.airportSystem.airport_system.Entities.Booking;
 import com.airportSystem.airport_system.Entities.BookingDto;
 import com.airportSystem.airport_system.Entities.FlightAssign;
 import com.airportSystem.airport_system.Entities.Passenger;
 
 public interface AirportService {
     
-    public Passenger getPassengerData(long id);
+    public Passenger getPassengerData(String email);
 
     public String addPassenger(Passenger passenger);
 
     public void updatePassenger(Passenger passenger);
 
-    public String deletePassenger(long id);
+    public String deletePassenger(String email);
 
     public Passenger findByEmailAndPassword(String email, String password);
 

@@ -4,9 +4,10 @@ c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\air
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Config\PassengerDetailService.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Config\SecurityConfig.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Config\WebSocketConfig.java
-c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Controller\AuthController.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Controller\controller.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Controller\FlightController.java
+c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Controller\LoginController.java
+c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Controller\PublicController.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Controller\Staffcontroller.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Dao\BookedSeatRepository.java
 c:\Users\Krish\Desktop\enjoyRide\Airport project (java+react)\airport-system\airport-system\src\main\java\com\airportSystem\airport_system\Dao\BookingRepository.java

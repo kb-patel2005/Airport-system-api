@@ -53,8 +53,8 @@ public class AirportServiceImplementation implements AirportService {
     private SimpMessagingTemplate messagingTemplate;
 
     @Override
-    public Passenger getPassengerData(long id) {
-        return repository.findById(id).orElse(null);
+    public Passenger getPassengerData(String email) {
+        return repository.findByEmail(email).orElse(null);
     }
 
     @Override
@@ -79,8 +79,11 @@ public class AirportServiceImplementation implements AirportService {
     }
 
     @Override
-    public String deletePassenger(long id) {
-        repository.deleteById(id);
+    public String deletePassenger(String email) {
+        Passenger passenger = repository.findByEmail(email).orElse(null);
+        if (passenger != null) {
+            repository.delete(passenger);
+        }
         return "Delete Passenger Data";
     }
 
