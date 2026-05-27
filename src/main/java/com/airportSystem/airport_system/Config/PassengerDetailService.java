@@ -21,7 +21,7 @@ public class PassengerDetailService implements UserDetailsService {
                 .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found"));
 
         return org.springframework.security.core.userdetails.User
-                .withUsername(passenger.getUsername())
+                .withUsername(passenger.getEmail())
                 .password(passenger.getPassword())
                 .accountExpired(false)
                 .authorities("USER")
