@@ -22,7 +22,7 @@ public class JwtFilter extends org.springframework.web.filter.OncePerRequestFilt
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-            HttpServletResponse response,FilterChain filterChain)
+            HttpServletResponse response, FilterChain filterChain)
             throws java.io.IOException, ServletException {
         final String authorizationHeader = request.getHeader("Authorization");
         String token = null;
@@ -32,20 +32,21 @@ public class JwtFilter extends org.springframework.web.filter.OncePerRequestFilt
             username = jwtUtils.extractUsername(token);
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = 
-                PassengerDetailService.loadUserByUsername(username);
-            
+            UserDetails userDetails = PassengerDetailService.loadUserByUsername(username);
+
             if (jwtUtils.validateToken(token, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
-                
-                authToken.setDetails(new org.springframework.security.web.authentication.WebAuthenticationDetailsSource().buildDetails(request));
-                
+
+                authToken
+                        .setDetails(new org.springframework.security.web.authentication.WebAuthenticationDetailsSource()
+                                .buildDetails(request));
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
+        
         filterChain.doFilter(request, response);
     }
-    
+
 }
